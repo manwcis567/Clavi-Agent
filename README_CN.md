@@ -30,10 +30,6 @@
   - [本地账号体系](#本地账号体系)
     - [Root 初始化](#root-初始化)
     - [升级历史数据](#升级历史数据)
-  - [使用示例](#使用示例)
-    - [任务执行](#任务执行)
-    - [使用 Claude Skill（例如：PDF 生成）](#使用-claude-skill例如pdf-生成)
-    - [网页搜索与摘要（MCP 工具）](#网页搜索与摘要mcp-工具)
   - [交付物优先工作流](#交付物优先工作流)
     - [上传与附件如何工作](#上传与附件如何工作)
     - [上传限制与安全规则](#上传限制与安全规则)
@@ -299,28 +295,6 @@ uv run clavi-agent-migrate-root-data --config clavi_agent/config/config.yaml
 - 按需创建 `root` 账号
 - 将历史记录回填到 `root`
 - 输出逐表校验报告，包含总数、已回填数量和仍为空的归属数量
-
-## 使用示例
-
-这里有几个 Clavi Agent 能力的演示。
-
-### 任务执行
-
-*在这个演示中，我们要求 Agent 创建一个简洁美观的网页并在浏览器中显示它，以此展示基础的工具使用循环。*
-
-![演示动图 1: 基础任务执行](docs/assets/demo1-task-execution.gif "基础任务执行演示")
-
-### 使用 Claude Skill（例如：PDF 生成）
-
-*这里，Agent 利用 Claude Skill 根据用户请求创建专业文档（如 PDF 或 DOCX），展示了其强大的高级能力。*
-
-![演示动图 2: Claude Skill 使用](docs/assets/demo2-claude-skill.gif "Claude Skill 使用演示")
-
-### 网页搜索与摘要（MCP 工具）
-
-*此演示展示了 Agent 如何使用其网页搜索工具在线查找最新信息，并为用户进行总结。*
-
-![演示动图 3: 网页搜索](docs/assets/demo3-web-search.gif "网页搜索演示")
 
 ## 交付物优先工作流
 

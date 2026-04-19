@@ -30,10 +30,6 @@ This project comes packed with features designed for a robust and intelligent ag
   - [Local Accounts](#local-accounts)
     - [Root Bootstrap](#root-bootstrap)
     - [Upgrade Existing Data](#upgrade-existing-data)
-  - [Usage Examples](#usage-examples)
-    - [Task Execution](#task-execution)
-    - [Using a Claude Skill (e.g., PDF Generation)](#using-a-claude-skill-eg-pdf-generation)
-    - [Web Search \& Summarization (MCP Tool)](#web-search--summarization-mcp-tool)
   - [Deliverable-First Workflow](#deliverable-first-workflow)
     - [How File Uploads Work](#how-file-uploads-work)
     - [Upload Limits And Safety](#upload-limits-and-safety)
@@ -299,28 +295,6 @@ The migration command:
 - Creates the `root` account if needed
 - Backfills historical records to `root`
 - Prints a per-table report showing total rows, backfilled rows, and remaining empty ownership rows
-
-## Usage Examples
-
-Here are a few examples of what Clavi Agent can do.
-
-### Task Execution
-
-*In this demo, the agent is asked to create a simple, beautiful webpage and display it in the browser, showcasing the basic tool-use loop.*
-
-![Demo GIF 1: Basic Task Execution](docs/assets/demo1-task-execution.gif "Basic Task Execution Demo")
-
-### Using a Claude Skill (e.g., PDF Generation)
-
-*Here, the agent leverages a Claude Skill to create a professional document (like a PDF or DOCX) based on the user's request, demonstrating its advanced capabilities.*
-
-![Demo GIF 2: Claude Skill Usage](docs/assets/demo2-claude-skill.gif "Claude Skill Usage Demo")
-
-### Web Search & Summarization (MCP Tool)
-
-*This demo shows the agent using its web search tool to find up-to-date information online and summarize it for the user.*
-
-![Demo GIF 3: Web Search](docs/assets/demo3-web-search.gif "Web Search Demo")
 
 ## Deliverable-First Workflow
 
