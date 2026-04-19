@@ -63,6 +63,7 @@ claude.md
 # Public release: keep only the root README in Markdown
 *.md
 !/README.md
+!/README_CN.md
 
 # Internal/extended docs omitted from the public snapshot
 docs/*.md

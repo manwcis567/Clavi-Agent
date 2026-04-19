@@ -2,16 +2,16 @@
 
 > The key to next-gen intelligent action
 
-**Clavi Agent** is an evolved agent project that grew out of earlier mini-agent exploration and now follows its own roadmap while moving alongside the broader mini-agent ecosystem. It keeps a lightweight, professional runtime, adds durable memory and account isolation, and stays flexible about which LLM provider or model you connect.
+English | [中文](./README_CN.md)
 
-This public snapshot intentionally omits internal design notes, prompt markdown, and other non-`README.md` documentation files.
+**Clavi Agent** is an evolved agent project that grew out of earlier mini-agent exploration and now follows its own roadmap while moving alongside the broader mini-agent ecosystem. It keeps a lightweight, professional runtime, adds durable memory and account isolation, and stays flexible about which LLM provider or model you connect.
 
 This project comes packed with features designed for a robust and intelligent agent development experience:
 
 *   ✅ **Full Agent Execution Loop**: A complete and reliable foundation with a basic toolset for file system and shell operations.
 *   ✅ **Persistent Memory**: An active **Session Note Tool** ensures the agent retains key information across multiple sessions.
 *   ✅ **Intelligent Context Management**: Automatically summarizes conversation history to handle contexts up to a configurable token limit, enabling infinitely long tasks.
-*   ✅ **Claude Skills Support**: Supports Claude-style skill loading and skill-aware workflows.
+*   ✅ **Claude Skills Integration**: Comes with professional skills for documents, design, testing, and development.
 *   ✅ **MCP Tool Integration**: Natively supports MCP for tools like knowledge graph access and web search.
 *   ✅ **Comprehensive Logging**: Detailed logs for every request, response, and tool execution for easy debugging.
 *   ✅ **Dynamic Agent Studio**: Use the built-in Marketplace to visually configure, save, and deploy specialized Agents directly into chat sessions.
@@ -44,6 +44,7 @@ This project comes packed with features designed for a robust and intelligent ag
   - [Troubleshooting](#troubleshooting)
     - [SSL Certificate Error](#ssl-certificate-error)
     - [Module Not Found Error](#module-not-found-error)
+  - [Related Documentation](#related-documentation)
   - [Contributing](#contributing)
   - [License](#license)
   - [References](#references)
@@ -95,7 +96,7 @@ Perfect for users who want to quickly try Clavi Agent without setting up an edit
 
 ```bash
 # Install directly from the current repository
-uv tool install git+https://github.com/manwcis567/Clavi-Agent.git
+uv tool install git+https://gitee.com/bnsp/ClaviAgent.git
 ```
 
 **Configuration:**
@@ -137,7 +138,7 @@ For developers who need to modify code, add features, or debug.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/manwcis567/Clavi-Agent.git ClaviAgent
+git clone https://gitee.com/bnsp/ClaviAgent.git ClaviAgent
 cd ClaviAgent
 
 # 2. Install uv (if you haven't)
@@ -246,7 +247,9 @@ start-server.cmd       # Windows CMD
 
 Then open [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-> This public snapshot omits the extended Markdown guides that exist in the private working repository.
+> 📖 For more development guidance, see [Development Guide](docs/DEVELOPMENT_GUIDE.md)
+
+> 📖 For more production deployment guidance, see [Production Guide](docs/PRODUCTION_GUIDE.md)
 
 ### Agent Studio Template Policy
 
@@ -400,11 +403,17 @@ cd ClaviAgent
 python -m clavi_agent.cli
 ```
 
+## Related Documentation
+
+- [Development Guide](docs/DEVELOPMENT_GUIDE.md) - Detailed development and configuration guidance
+- [Production Guide](docs/PRODUCTION_GUIDE.md) - Best practices for production deployment
+
 ## Contributing
 
 Issues and Pull Requests are welcome!
 
-Please open an issue or pull request if you want to discuss improvements.
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Community guidelines
 
 ## License
 
@@ -412,7 +421,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## References
 
-- ClaviAgent repository: https://github.com/manwcis567/Clavi-Agent.git
+- ClaviAgent repository: https://gitee.com/bnsp/ClaviAgent.git
 - Anthropic API: https://docs.anthropic.com/claude/reference
 - Claude Skills: https://github.com/anthropics/skills
 - MCP Servers: https://github.com/modelcontextprotocol/servers
