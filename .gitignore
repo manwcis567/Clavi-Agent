@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Workspace
+workspace/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config (contains API keys)
+config.yaml
+
+# test file
+demo.py
+hello.py
+test.txt
+hello_world.py
+demo_test.txt
+demo_commands.txt
+mcp.json.bak
+
+docs/assets/backup/
+docs/assets/preview.html
+docs/毕业论文_基于多智能体协作的复杂任务求解研究.md
+tmp_doc/
+
+claude.md
+
+# Public release: keep only the root README in Markdown
+*.md
+!/README.md
+
+# Internal/extended docs omitted from the public snapshot
+docs/*.md
+docs/clavi-agent-course.html
+manual_verify/

@@ -1,0 +1,445 @@
+<div class="p-8 text-on-surface h-full flex flex-col bg-surface shadow-inner">
+    <!-- Hero Presentation Card -->
+    <div
+        class="relative min-h-[280px] md:min-h-[340px] bg-gradient-to-br from-[#13151a] to-[#0c0e11] rounded-[24px] p-10 md:p-12 mb-8 overflow-hidden border border-white/5 shadow-2xl">
+        <!-- Abstract Circuit/Glow Background -->
+        <div class="absolute right-0 top-0 bottom-0 w-2/3 pointer-events-none">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(0,238,252,0.08),transparent_65%)]">
+            </div>
+            <!-- Fake circuit lines -->
+            <div
+                class="absolute right-0 top-[20%] h-[1px] w-[30%] bg-gradient-to-l from-primary/40 to-transparent shadow-[0_0_8px_rgba(0,238,252,0.8)]">
+            </div>
+            <div
+                class="absolute right-[10%] top-[20%] w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_10px_rgba(0,238,252,1)]">
+            </div>
+
+            <div class="absolute right-0 top-[35%] h-[1px] w-[50%] bg-gradient-to-l from-[#d575ff]/30 to-transparent">
+            </div>
+            <div class="absolute right-[25%] top-[35%] w-1 h-1 rounded-full bg-[#d575ff]"></div>
+
+            <div
+                class="absolute right-0 top-[50%] h-[1px] w-[65%] bg-gradient-to-l from-primary/30 to-transparent shadow-[0_0_8px_rgba(0,238,252,0.5)]">
+            </div>
+            <div
+                class="absolute right-[40%] top-[50%] w-2 h-2 rounded-full bg-primary/80 shadow-[0_0_12px_rgba(0,238,252,0.8)]">
+            </div>
+
+            <div class="absolute right-0 top-[65%] h-[1px] w-[40%] bg-gradient-to-l from-[#d575ff]/40 to-transparent">
+            </div>
+            <div class="absolute right-0 top-[80%] h-[1px] w-[20%] bg-gradient-to-l from-primary/20 to-transparent">
+            </div>
+
+            <!-- Additional horizontal light trails -->
+            <div class="absolute right-0 top-[42%] h-[2px] w-[15%] bg-gradient-to-l from-white/20 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl">
+            <p class="text-[10px] font-bold tracking-widest text-[#d575ff] uppercase mb-5">Neural Nexus Marketplace</p>
+            <h1 class="text-4xl md:text-5xl font-headline font-bold text-white mb-6 leading-[1.15]">
+                打造专属的 <span class="text-primary italic">Intelligence</span> Cluster.
+            </h1>
+            <p class="text-on-surface-variant text-[15px] leading-relaxed mb-8 max-w-2xl">
+                将预训练的、针对特定任务的 Autonomous Agents 无缝部署到你的工作流中。每个 Agent 都针对特定的 LLM 架构和工业标准进行了深度优化。
+            </p>
+            <div class="flex flex-wrap items-center gap-4">
+                <button
+                    class="px-7 py-3 bg-[#42f5ff] hover:bg-[#00eefc] text-[#003f43] font-bold rounded-xl text-sm transition-all shadow-[0_0_15px_rgba(0,238,252,0.25)] hover:shadow-[0_0_20px_rgba(0,238,252,0.4)]">浏览热门</button>
+                <button
+                    class="px-7 py-3 bg-[#23262a] hover:bg-[#292c31] text-white font-bold rounded-xl text-sm transition-all shadow-lg hover:shadow-xl border border-white/5">查看
+                    Stack</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search / Filter -->
+    <div class="flex gap-4 mb-8">
+        <div class="relative flex-1 max-w-md">
+            <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+            <input type="text"
+                class="w-full bg-surface-container-high border border-outline-variant/20 focus:border-primary/50 text-sm px-11 py-2.5 rounded-xl transition-colors"
+                placeholder="按名称、能力搜索智能体..." />
+        </div>
+        <select
+            class="bg-surface-container-high border border-outline-variant/20 text-sm px-4 py-2.5 rounded-xl outline-none focus:border-primary/50 text-on-surface cursor-pointer">
+            <option>全部分类</option>
+            <option>开发</option>
+            <option>数据分析</option>
+            <option>开发运维</option>
+        </select>
+    </div>
+
+    <div id="marketplace-boundary-note"
+        class="mb-8 flex flex-col gap-3 rounded-[20px] border border-white/5 bg-surface-container-low px-5 py-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-primary">模板目录</div>
+            <p class="mt-2 max-w-3xl text-sm leading-relaxed text-on-surface-variant">
+                在这里配置智能体模板默认值。实际的运行记录、追踪时间线、审批和控制等状态都保留在工作区的
+                “详情面板”中，与这里的模板设置完全隔离。
+            </p>
+        </div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
+            <span class="material-symbols-outlined text-[16px]">frame_inspect</span>
+            运行记录在工作区查看
+        </div>
+    </div>
+
+    <div id="agentsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-8">
+        <!-- Dynamic Agent Cards injected via app.js -->
+    </div>
+
+    <!-- Agent Config Dialog / Modal -->
+    <div id="agentConfigModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="closeAgentModal()"></div>
+
+        <!-- Modal Content -->
+        <div
+            class="relative bg-surface-container border border-outline-variant/30 rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-6 border-b border-outline-variant/10">
+                <h2 id="agentModalTitle" class="text-xl font-bold font-headline text-white">新建智能体</h2>
+                <button onclick="closeAgentModal()"
+                    class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 text-on-surface-variant transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-6 overflow-y-auto flex-1 session-history-scrollbar space-y-5 relative">
+                <div class="flex justify-between items-center mb-1">
+                    <span id="agentModalSubtitle" class="text-xs text-on-surface-variant">填写部分字段，其余可自动生成。</span>
+                    <button id="btnBrainstormAgent" onclick="window.brainstormAgentConfig()"
+                        class="flex items-center gap-1.5 px-3 py-1.5 bg-secondary/10 hover:bg-secondary/20 text-secondary rounded-lg shadow border border-secondary/20 text-xs font-bold transition-all hover:scale-105">
+                        <span class="material-symbols-outlined text-[14px] animate-pulse">magic_button</span> 自动头脑风暴
+                    </button>
+                </div>
+
+                <input type="hidden" id="agentIdInput" value="">
+
+                <div id="agentReadonlyBanner" class="hidden"></div>
+
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Agent
+                        Name</label>
+                    <input type="text" id="agentNameInput"
+                        class="w-full bg-surface-container-highest border border-outline-variant/20 focus:border-primary/50 text-sm px-4 py-3 rounded-xl transition-colors outline-none text-white focus:shadow-[0_0_10px_rgba(0,238,252,0.1)]"
+                        placeholder="例如：前端专家">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Short
+                        Description</label>
+                    <input type="text" id="agentDescInput"
+                        class="w-full bg-surface-container-highest border border-outline-variant/20 focus:border-primary/50 text-sm px-4 py-3 rounded-xl transition-colors outline-none text-white focus:shadow-[0_0_10px_rgba(0,238,252,0.1)]"
+                        placeholder="简要描述该智能体的功能">
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2 flex justify-between">
+                        <span>系统提示词</span>
+                        <span class="text-primary/70 normal-case font-normal">核心指令</span>
+                    </label>
+                    <textarea id="agentPromptInput" rows="6"
+                        class="w-full bg-surface-container-highest border border-outline-variant/20 focus:border-primary/50 text-sm px-4 py-3 rounded-xl transition-colors outline-none text-white resize-none focus:shadow-[0_0_10px_rgba(0,238,252,0.1)] font-mono leading-relaxed"
+                        placeholder="你是一个专家..."></textarea>
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Capabilities
+                        / Tools</label>
+                    <div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10 space-y-3">
+                        <div class="text-sm text-on-surface">All agents now receive the default workspace toolset
+                            automatically.</div>
+                        <div class="flex flex-wrap gap-2">
+                            <span
+                                class="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">Bash</span>
+                            <span
+                                class="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">读取</span>
+                            <span
+                                class="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">写入</span>
+                            <span
+                                class="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">编辑</span>
+                            <span
+                                class="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">Session
+                                Notes</span>
+                            <span
+                                class="px-2.5 py-1 rounded-full bg-surface-container-highest text-[11px] text-on-surface-variant">Shared
+                                Context</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">Installed
+                        Skills</label>
+                    <div id="installedSkillsContainer"
+                        class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/10 min-h-[72px]">
+                        <div class="text-sm text-on-surface-variant">暂未安装任何技能。</div>
+                    </div>
+                    <div id="skillInstallStatus" class="mt-3 text-xs text-on-surface-variant">No skill installation in
+                        progress.</div>
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2 flex justify-between">
+                        <span>推荐能力维度</span>
+                        <span id="recommendedSkillKeyword" class="text-primary/70 normal-case font-normal">Run Auto
+                            Brainstorm to get suggestions</span>
+                    </label>
+                    <div class="flex flex-col gap-3 mb-3 md:flex-row">
+                        <div class="relative flex-1">
+                            <input type="text" id="skillSearchKeywordInput"
+                                class="w-full bg-surface-container-highest border border-outline-variant/20 focus:border-primary/50 text-sm px-4 py-3 rounded-xl transition-colors outline-none text-white"
+                                placeholder="通过关键词搜索技能">
+                            <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+                        </div>
+                        <button id="btnSearchSkills" onclick="window.searchAgentSkills()"
+                            class="px-4 py-3 rounded-xl text-sm font-bold bg-white/5 border border-white/10 hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">travel_explore</span>
+                            搜索技能
+                        </button>
+                        <button id="btnInstallSelectedSkills" onclick="window.installSelectedSkills()"
+                            class="px-4 py-3 rounded-xl text-sm font-bold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 transition-colors flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">download</span>
+                            安装选中项
+                        </button>
+                    </div>
+                    <div id="skillSearchHint" class="mb-3 text-xs text-on-surface-variant">手动搜索技能。新智能体在您保存后将自动安装选中的技能。</div>
+                    <div id="skillSearchResults"
+                        class="grid grid-cols-1 gap-3 bg-surface-container-low p-4 rounded-xl border border-outline-variant/10">
+                        <div class="text-sm text-on-surface-variant">Search skills by keyword or use Auto Brainstorm
+                            to get suggestions.</div>
+                    </div>
+                </div>
+
+                <section id="agentTemplatePolicySection"
+                    class="rounded-2xl border border-outline-variant/10 bg-surface-container-low p-5 space-y-5">
+                    <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold font-headline text-white">模板策略 (Template Policy)</h3>
+                            <p class="mt-1 text-xs leading-relaxed text-on-surface-variant">
+                                市场仅编辑模板参数。运行界面的追踪、审批和相关记录将保留在工作区侧边栏中。
+                            </p>
+                        </div>
+                        <span
+                            class="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+                            <span class="material-symbols-outlined text-[14px]">tune</span>
+                            Config surface
+                        </span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">默认工具集</label>
+                        <div id="agentDefaultToolsContainer"
+                            class="rounded-xl border border-outline-variant/10 bg-surface-container p-4 min-h-[70px]"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">工作区策略</label>
+                            <select id="agentWorkspaceModeInput"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50">
+                                <option value="isolated">独立工作区隔离</option>
+                                <option value="shared">共享共用工作区</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">风险策略</label>
+                            <select id="agentApprovalModeInput"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50">
+                                <option value="default">默认审核机制</option>
+                                <option value="on-request">按需拦截</option>
+                                <option value="strict">严格全部审批</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <label
+                            class="flex items-center gap-3 rounded-xl border border-outline-variant/10 bg-surface-container px-4 py-3 text-sm text-on-surface">
+                            <input id="agentAllowSessionOverrideInput" type="checkbox"
+                                class="rounded border-outline-variant/30 bg-surface-container-highest text-primary focus:ring-primary/40">
+                            <span>允许会话级别的工作区配置覆盖</span>
+                        </label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">运行超时 (秒)</label>
+                                <input id="agentRunTimeoutInput" type="number" min="1"
+                                    class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                    placeholder="继承默认值">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">最大并发数</label>
+                                <input id="agentRunConcurrencyInput" type="number" min="1"
+                                    class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                    placeholder="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">限定可读根目录</label>
+                            <input id="agentReadableRootsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="例如: docs, specs, logs">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">限定可写根目录</label>
+                            <input id="agentWritableRootsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="例如: docs, reports, output">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">只读工具</label>
+                            <input id="agentReadOnlyToolsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="bash, ReadTool">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">黑名单工具</label>
+                            <input id="agentDisabledToolsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="delegate_task, MCPTool">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">允许的 Shell 命令</label>
+                            <input id="agentAllowedShellCommandsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="git status, python -m pytest">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">白名单网络域名</label>
+                            <input id="agentAllowedNetworkDomainsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="example.com, github.com">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">强制审批工具</label>
+                            <input id="agentRequireApprovalToolsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="write_file, bash">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">免审放行工具</label>
+                            <input id="agentAutoApproveToolsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="read_file">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">审批风险等级</label>
+                            <input id="agentRequireApprovalRiskLevelsInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="medium, high, critical">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">审批风险分类</label>
+                            <input id="agentRequireApprovalRiskCategoriesInput" type="text"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"
+                                placeholder="external_network, shell_write">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">策略备注</label>
+                        <textarea id="agentPolicyNotesInput" rows="3"
+                            class="w-full resize-none rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm leading-relaxed text-white outline-none transition-colors focus:border-primary/50"
+                            placeholder="记录相应的要求、护栏信息或操作指引等。"></textarea>
+                    </div>
+
+                    <section class="rounded-2xl border border-outline-variant/10 bg-surface-container p-4 space-y-4">
+                        <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                            <div>
+                                <h4 class="text-sm font-bold text-white">委派策略 (Delegation Policy)</h4>
+                                <p class="mt-1 text-xs leading-relaxed text-on-surface-variant">
+                                    下面这些选项决定主 agent 是继续保留直做路径，还是优先把写文件、Shell、状态型 MCP 等执行工作交给 worker。
+                                </p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">执行模式</label>
+                            <select id="agentDelegationModeInput"
+                                class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50">
+                                <option value="hybrid">混合模态 (Hybrid)</option>
+                                <option value="prefer_delegate">优先委派 (Prefer Delegate)</option>
+                                <option value="supervisor_only">仅限监督 (Supervisor Only)</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                            <label class="flex items-center gap-3 rounded-xl border border-outline-variant/10 bg-surface-container px-4 py-3 text-sm text-on-surface">
+                                <input id="agentRequireDelegateWriteInput" type="checkbox"
+                                    class="rounded border-outline-variant/30 bg-surface-container-highest text-primary focus:ring-primary/40">
+                                <span>写操作必须委派给 worker</span>
+                            </label>
+                            <label class="flex items-center gap-3 rounded-xl border border-outline-variant/10 bg-surface-container px-4 py-3 text-sm text-on-surface">
+                                <input id="agentRequireDelegateShellInput" type="checkbox"
+                                    class="rounded border-outline-variant/30 bg-surface-container-highest text-primary focus:ring-primary/40">
+                                <span>Shell 命令必须委派</span>
+                            </label>
+                            <label class="flex items-center gap-3 rounded-xl border border-outline-variant/10 bg-surface-container px-4 py-3 text-sm text-on-surface">
+                                <input id="agentRequireDelegateMcpInput" type="checkbox"
+                                    class="rounded border-outline-variant/30 bg-surface-container-highest text-primary focus:ring-primary/40">
+                                <span>有状态 MCP 调用必须委派</span>
+                            </label>
+                            <label class="flex items-center gap-3 rounded-xl border border-outline-variant/10 bg-surface-container px-4 py-3 text-sm text-on-surface">
+                                <input id="agentAllowMainReadToolsInput" type="checkbox"
+                                    class="rounded border-outline-variant/30 bg-surface-container-highest text-primary focus:ring-primary/40">
+                                <span>主 agent 保留只读工具</span>
+                            </label>
+                            <label class="flex items-center gap-3 rounded-xl border border-outline-variant/10 bg-surface-container px-4 py-3 text-sm text-on-surface">
+                                <input id="agentVerifyWorkerOutputInput" type="checkbox"
+                                    class="rounded border-outline-variant/30 bg-surface-container-highest text-primary focus:ring-primary/40">
+                                <span>主 agent 必须先验收 worker 结果</span>
+                            </label>
+                            <label class="flex items-center gap-3 rounded-xl border border-outline-variant/10 bg-surface-container px-4 py-3 text-sm text-on-surface">
+                                <input id="agentPreferBatchDelegateInput" type="checkbox"
+                                    class="rounded border-outline-variant/30 bg-surface-container-highest text-primary focus:ring-primary/40">
+                                <span>多个独立子任务优先批量委派</span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="rounded-2xl border border-outline-variant/10 bg-surface-container p-4 space-y-3">
+                        <div class="text-xs font-bold uppercase tracking-[0.18em] text-primary">Model Routing</div>
+                        <div id="agentRoutingConfigNote" class="rounded-xl border border-primary/20 bg-primary/10 px-4 py-4 text-sm leading-relaxed text-on-surface">
+                            主 agent / 子 agent 使用的 API 组现在统一在 API Settings 中配置。Agent 模板只负责身份、工具和委派策略，不再单独保存模型路由。
+                        </div>
+                    </section>
+                </section>
+            </div>
+
+            <!-- Footer -->
+            <div
+                class="p-6 border-t border-outline-variant/10 flex justify-end gap-3 bg-surface-container-low rounded-b-2xl">
+                <button onclick="closeAgentModal()"
+                    class="px-5 py-2.5 rounded-xl text-sm font-bold text-on-surface hover:bg-white/5 transition-colors border border-transparent hover:border-outline-variant/20">取消</button>
+                <button id="saveAgentButton" onclick="saveAgentConfig()"
+                    class="px-5 py-2.5 rounded-xl text-sm font-bold bg-primary text-[#003f43] hover:bg-[#00eefc] transition-colors shadow-[0_0_15px_rgba(0,238,252,0.2)] hover:shadow-[0_0_20px_rgba(0,238,252,0.4)] flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px] hidden"
+                        id="saveAgentSpinner">progress_activity</span>
+                    保存配置
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,737 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Clavi Agent Workspace</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0c0e11;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #23262a;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #46484b;
+        }
+
+        /* Markdown Renderer Overrides for Tailwind */
+        .markdown p {
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown p:last-child {
+            margin-bottom: 0;
+        }
+
+        .markdown h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 1.5rem 0 0.75rem;
+            color: #f9f9fd;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .markdown h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 1.25rem 0 0.5rem;
+            color: #f9f9fd;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .markdown h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 1rem 0 0.5rem;
+            color: #f9f9fd;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .markdown ul {
+            list-style-type: disc;
+            padding-left: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown ol {
+            list-style-type: decimal;
+            padding-left: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown li {
+            margin-bottom: 0.25rem;
+        }
+
+        .markdown a {
+            color: #8ff5ff;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .markdown a:hover {
+            color: #00eefc;
+        }
+
+        .markdown pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 0.75rem;
+            border: 1px solid rgba(70, 72, 75, 0.4);
+        }
+
+        .markdown code {
+            background: rgba(143, 245, 255, 0.1);
+            color: #8ff5ff;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85em;
+        }
+
+        .markdown pre code {
+            background: transparent;
+            padding: 0;
+            color: #dadfef;
+        }
+
+        .markdown blockquote {
+            border-left: 3px solid #8ff5ff;
+            padding-left: 1rem;
+            color: #aaabaf;
+            font-style: italic;
+            margin-bottom: 0.75rem;
+        }
+
+        .markdown hr {
+            border-color: rgba(70, 72, 75, 0.4);
+            margin: 1.5rem 0;
+        }
+
+        .markdown table {
+            width: 100%;
+            margin-bottom: 0.75rem;
+            border-collapse: collapse;
+        }
+
+        .markdown th,
+        .markdown td {
+            border: 1px solid rgba(70, 72, 75, 0.4);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .markdown th {
+            background: rgba(35, 38, 42, 0.8);
+        }
+
+        /* Agent Streaming Dots */
+        .dots {
+            display: inline-flex;
+            gap: 6px;
+            padding: 8px 0;
+        }
+
+        .dots span {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #8ff5ff;
+            animation: blink 1.2s infinite ease-in-out both;
+        }
+
+        .dots span:nth-child(2) {
+            animation-delay: .16s;
+        }
+
+        .dots span:nth-child(3) {
+            animation-delay: .32s;
+        }
+
+        @keyframes blink {
+
+            0%,
+            80%,
+            100% {
+                opacity: .3;
+                transform: translateY(0);
+            }
+
+            40% {
+                opacity: 1;
+                transform: translateY(-2px);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed": "#f0c1ff", "surface-container-low": "#111417", "primary-fixed": "#00eefc",
+                        "surface-container-lowest": "#000000", "tertiary-fixed-dim": "#dadfef", "tertiary-dim": "#dadfef",
+                        "primary-dim": "#00deec", "on-secondary-fixed-variant": "#8300b4", "tertiary-container": "#e5ebfb",
+                        "surface": "#0c0e11", "on-primary-container": "#005359", "on-tertiary-container": "#515764",
+                        "outline": "#747579", "error-container": "#9f0519", "on-primary": "#005d63",
+                        "surface-container-high": "#1d2024", "on-primary-fixed-variant": "#005e64", "on-secondary": "#390050",
+                        "background": "#0c0e11", "primary-container": "#00eefc", "primary": "#8ff5ff",
+                        "surface-dim": "#0c0e11", "tertiary": "#f9f9ff", "error": "#ff716c", "on-background": "#f9f9fd",
+                        "secondary-container": "#9800d0", "surface-container-highest": "#23262a", "secondary-fixed-dim": "#eaaeff",
+                        "on-tertiary-fixed-variant": "#5d6370", "on-error": "#490006", "surface-bright": "#292c31",
+                        "secondary": "#d575ff", "primary-fixed-dim": "#00deec", "inverse-surface": "#f9f9fd", "on-surface": "#f9f9fd",
+                        "surface-container": "#171a1d", "surface-tint": "#8ff5ff", "error-dim": "#d7383b", "inverse-on-surface": "#535559",
+                        "tertiary-fixed": "#e8eefe", "secondary-dim": "#b90afc", "outline-variant": "#46484b",
+                        "on-secondary-container": "#fff5fc", "on-surface-variant": "#aaabaf", "inverse-primary": "#006a71",
+                        "on-primary-fixed": "#003f43", "surface-variant": "#23262a", "on-error-container": "#ffa8a3",
+                        "on-tertiary": "#595f6c", "on-tertiary-fixed": "#404653", "on-secondary-fixed": "#58007a"
+                    },
+                    fontFamily: { "headline": ["Space Grotesk"], "body": ["Inter"], "label": ["Inter"] },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-surface text-on-surface font-body overflow-hidden">
+    <div id="app" class="h-full w-full">
+        <!-- TopAppBar -->
+        <header
+            class="fixed top-0 left-0 right-0 z-50 bg-[#0c0e11] border-b border-white/5 flex justify-between items-center w-full px-6 h-16">
+            <div class="flex items-center gap-8">
+                <div id="logo-home-btn" class="cursor-pointer">
+                    <div class="text-xl font-bold tracking-tighter text-[#00F0FF] uppercase font-['Space_Grotesk']">
+                        <a href="/" class="hover:text-cyan-300 transition-colors">Clavi Agent</a>
+                    </div>
+                    <div class="text-[9px] font-semibold uppercase tracking-[0.28em] text-primary">The key to next-gen intelligent action</div>
+                </div>
+                <nav id="main-sidebar-nav" class="flex gap-6 items-center h-full font-['Space_Grotesk']">
+                    <a class="nav-item flex items-center gap-2 tracking-tight text-[#00F0FF] border-b-2 border-[#00F0FF] hover:text-[#00F0FF] transition-colors duration-200 cursor-pointer h-full border-t-2 border-t-transparent mt-[2px]"
+                        data-view="orchestrator">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                        <span class="text-sm font-bold pt-[1px]">Agent</span>
+                    </a>
+                    <a class="nav-item flex items-center gap-2 tracking-tight text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition-colors duration-200 cursor-pointer h-full border-t-2 border-t-transparent mt-[2px]"
+                        data-view="agent-marketplace">
+                        <span class="material-symbols-outlined text-[18px]">storefront</span>
+                        <span class="text-sm font-bold pt-[1px]">Marketplace</span>
+                    </a>
+                    <a class="nav-item flex items-center gap-2 tracking-tight text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition-colors duration-200 cursor-pointer h-full border-t-2 border-t-transparent mt-[2px]"
+                        data-view="memory">
+                        <span class="material-symbols-outlined text-[18px]">memory</span>
+                        <span class="text-sm font-bold pt-[1px]">Memory</span>
+                    </a>
+                    <a class="nav-item flex items-center gap-2 tracking-tight text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition-colors duration-200 cursor-pointer h-full border-t-2 border-t-transparent mt-[2px]"
+                        data-view="system-integrations">
+                        <span class="material-symbols-outlined text-[18px]">integration_instructions</span>
+                        <span class="text-sm font-bold pt-[1px]">Integrations</span>
+                    </a>
+                    <a class="nav-item flex items-center gap-2 tracking-tight text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition-colors duration-200 cursor-pointer h-full border-t-2 border-t-transparent mt-[2px]"
+                        data-view="scheduled-tasks">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        <span class="text-sm font-bold pt-[1px]">Scheduled Tasks</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative hidden sm:block">
+                    <input
+                        class="bg-surface-container-highest border-none text-sm px-4 py-1.5 rounded-xl w-64 focus:ring-1 focus:ring-primary/50 text-on-surface"
+                        placeholder="Search commands..." type="text" />
+                    <span
+                        class="material-symbols-outlined absolute right-3 top-1.5 text-on-surface-variant text-sm">search</span>
+                </div>
+                <button class="text-on-surface-variant hover:text-primary transition-colors"><span
+                        class="material-symbols-outlined">settings</span></button>
+
+                <!-- 账号菜单 -->
+                <div class="relative" id="account-menu-wrapper">
+                    <button
+                        id="account-menu-btn"
+                        class="flex items-center gap-2 px-2 py-1 rounded-xl hover:bg-surface-container-highest/60 transition-colors cursor-pointer"
+                        title="账号菜单"
+                    >
+                        <div
+                            id="account-avatar"
+                            class="w-8 h-8 rounded-full border border-primary/20 bg-primary/10 flex items-center justify-center text-primary font-bold text-xs uppercase"
+                        >?</div>
+                        <span id="account-username-label" class="hidden sm:block text-xs font-mono text-on-surface-variant max-w-[80px] truncate">...</span>
+                        <span class="material-symbols-outlined text-on-surface-variant text-sm">expand_more</span>
+                    </button>
+
+                    <!-- 下拉菜单 -->
+                    <div
+                        id="account-dropdown"
+                        class="hidden absolute right-0 top-full mt-2 w-64 rounded-2xl border border-outline-variant/20 bg-surface-container shadow-[0_16px_48px_rgba(0,0,0,0.4)] z-[100] overflow-hidden"
+                    >
+                        <!-- 账号信息头部 -->
+                        <div class="px-4 py-4 border-b border-white/5 bg-surface-container-high/60">
+                            <div class="text-[10px] font-mono uppercase tracking-[0.18em] text-on-surface-variant mb-1">当前账号</div>
+                            <div id="dropdown-display-name" class="text-sm font-semibold text-on-surface truncate">—</div>
+                            <div id="dropdown-username" class="text-xs text-on-surface-variant font-mono truncate">—</div>
+                            <div id="dropdown-root-badge" class="hidden mt-2">
+                                <span class="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-[10px] font-mono uppercase text-amber-200">
+                                    <span class="material-symbols-outlined text-xs" style="font-size:12px">verified</span>
+                                    ROOT
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- 菜单项 -->
+                        <div class="p-2 space-y-0.5">
+                            <!-- 修改密码 -->
+                            <button
+                                id="btn-change-password"
+                                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface hover:bg-surface-container-highest transition-colors text-left"
+                            >
+                                <span class="material-symbols-outlined text-on-surface-variant text-sm">lock_reset</span>
+                                <span>修改密码</span>
+                            </button>
+
+                            <!-- 账号管理（仅 root 可见） -->
+                            <button
+                                id="btn-api-config"
+                                class="hidden w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface hover:bg-surface-container-highest transition-colors text-left"
+                            >
+                                <span class="material-symbols-outlined text-on-surface-variant text-sm">tune</span>
+                                <span>API Config</span>
+                            </button>
+
+                            <button
+                                id="btn-agent-routing"
+                                class="hidden w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface hover:bg-surface-container-highest transition-colors text-left"
+                            >
+                                <span class="material-symbols-outlined text-on-surface-variant text-sm">device_hub</span>
+                                <span>Agent API Routing</span>
+                            </button>
+
+                            <button
+                                id="btn-account-admin"
+                                class="hidden w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-on-surface hover:bg-surface-container-highest transition-colors text-left"
+                            >
+                                <span class="material-symbols-outlined text-on-surface-variant text-sm">manage_accounts</span>
+                                <span>账号管理</span>
+                            </button>
+
+                            <div class="border-t border-white/5 my-1"></div>
+
+                            <!-- 退出登录 -->
+                            <button
+                                id="btn-logout"
+                                class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-error hover:bg-error/10 transition-colors text-left"
+                            >
+                                <span class="material-symbols-outlined text-sm">logout</span>
+                                <span>退出登录</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <!-- Main Full-width Container -->
+        <main id="app-workspace"
+            class="fixed top-16 bottom-0 left-0 right-0 flex overflow-hidden w-full h-[calc(100vh-64px)]">
+
+
+            <!-- Dynamic Views Container -->
+            <div id="dynamic-content-area" class="flex-1 flex overflow-hidden relative w-full h-full bg-surface">
+
+                <!-- Orchestrator View -->
+                <div id="view-orchestrator" class="dynamic-view flex-1 flex overflow-hidden w-full h-full">
+                    <!-- Pane 2: Session Management -->
+                    <section id="pane-session"
+                        class="w-[320px] shrink-0 border-r border-white/5 flex flex-col bg-surface relative overflow-hidden transition-[width] duration-300">
+                        <button id="toggle-session"
+                            class="absolute top-4 right-4 p-1 text-on-surface-variant hover:text-white z-20"
+                            title="收起会话列表">
+                            <span class="material-symbols-outlined text-sm">keyboard_double_arrow_left</span>
+                        </button>
+                        <div class="p-4 flex flex-col gap-4">
+                            <button id="sidebar-new-session-btn" title="收起会话列表"
+                                class="flex items-center justify-between w-full p-4 rounded-xl bg-surface-container-high border border-outline-variant/20 hover:border-primary/50 transition-all group">
+                                <span class="font-headline font-bold text-sm tracking-wide">NEW SESSION</span>
+                                <span
+                                    class="material-symbols-outlined text-primary group-hover:rotate-90 transition-transform">add</span>
+                            </button>
+                        </div>
+                        <!-- Session List Container -->
+                        <div id="session-list" class="flex-1 overflow-y-auto px-2 pb-4 space-y-2"></div>
+                        <div class="p-4 bg-surface-container-low border-t border-white/5 w-[320px]">
+                            <div class="flex items-center gap-3 p-2 rounded-lg bg-surface-container-highest/50">
+                                <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]">
+                                </div>
+                                <span
+                                    class="text-[10px] font-mono uppercase tracking-widest text-on-surface-variant">System
+                                    Ready</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Resizer 2 -->
+                    <div class="w-1 shrink-0 bg-white/5 hover:bg-primary/50 cursor-col-resize z-40 resizer transition-colors"
+                        data-prev="pane-session" data-next="chat-view"></div>
+
+                    <!-- Middle Pane: Conversation -->
+                    <section id="chat-view"
+                        class="flex-1 min-w-[300px] flex flex-col bg-surface-container-low relative overflow-hidden">
+                        <div id="upload-dropzone"
+                            class="pointer-events-none hidden absolute inset-6 z-30 items-center justify-center rounded-[28px] border border-dashed border-primary/50 bg-[radial-gradient(circle_at_top,rgba(0,238,252,0.18),rgba(12,14,17,0.9)_58%)] shadow-[0_30px_80px_rgba(0,238,252,0.12)] backdrop-blur-sm">
+                            <div
+                                class="max-w-md rounded-[24px] border border-primary/30 bg-surface-container-high/95 px-8 py-7 text-center shadow-2xl">
+                                <div
+                                    class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10 text-primary">
+                                    <span class="material-symbols-outlined text-[28px]">upload_file</span>
+                                </div>
+                                <div class="mt-4 text-xs font-mono uppercase tracking-[0.26em] text-primary/80">拖拽上传</div>
+                                <h3 class="mt-3 text-2xl font-headline font-bold text-on-surface">松开即可加入当前会话</h3>
+                                <p class="mt-3 text-sm leading-relaxed text-on-surface-variant">
+                                    支持文档、表格、图片与 PDF。文件会先保存到当前会话，再作为下一条消息的附件发送给智能体。
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Chat Header -->
+                        <div
+                            class="h-14 px-6 border-b border-white/5 flex items-center justify-between bg-surface/50 backdrop-blur-md shrink-0">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-3">
+                                    <span
+                                        class="text-xs font-mono text-on-surface-variant uppercase tracking-widest">Active:</span>
+                                    <div
+                                        class="flex items-center gap-2 bg-secondary/10 px-3 py-1 rounded-full border border-secondary/20">
+                                        <span class="material-symbols-outlined text-sm text-secondary">smart_toy</span>
+                                        <span id="active-agent-label" class="text-xs font-bold text-secondary">LOADING_AGENT</span>
+                                    </div>
+                                </div>
+                                <div id="active-run-banner"
+                                    class="hidden items-center gap-2 text-[10px] font-mono uppercase tracking-[0.18em] text-on-surface-variant">
+                                    <span id="active-run-banner-status"
+                                        class="inline-flex items-center gap-1 rounded-full border border-primary/20 bg-primary/10 px-2 py-1 text-primary"></span>
+                                    <span id="active-run-banner-goal" class="truncate max-w-[320px]"></span>
+                                    <span id="active-run-banner-meta" class="text-on-surface-variant/70"></span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <button id="header-open-runs-btn"
+                                    class="hidden items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.2em] text-primary hover:bg-primary/15 transition-colors">
+                                    <span class="material-symbols-outlined text-sm">frame_inspect</span>
+                                    <span>详情</span>
+                                </button>
+                                <button class="text-on-surface-variant hover:text-on-surface"><span
+                                        class="material-symbols-outlined text-lg">more_vert</span></button>
+                            </div>
+                        </div>
+
+                        <div id="primary-attention-panel" class="hidden px-4 pt-4 md:px-8 shrink-0">
+                            <div class="max-w-4xl mx-auto">
+                                <section id="approval-inbox-shell"
+                                    class="hidden rounded-3xl border border-amber-400/20 bg-[linear-gradient(135deg,rgba(245,158,11,0.14),rgba(10,15,18,0.96))] px-5 py-5 shadow-[0_16px_50px_rgba(245,158,11,0.12)]">
+                                    <div class="flex items-start justify-between gap-4">
+                                        <div>
+                                            <div class="text-[10px] font-mono uppercase tracking-[0.22em] text-amber-200">需要你处理</div>
+                                            <h3 class="mt-2 text-lg font-semibold text-on-surface">当前任务正在等待你</h3>
+                                            <p class="mt-2 text-sm leading-relaxed text-amber-50/85">
+                                                请先处理下面的请求。完成批准或补充说明后，智能体会继续执行。
+                                            </p>
+                                        </div>
+                                        <span id="approval-inbox-count"
+                                            class="inline-flex min-w-8 items-center justify-center rounded-full border border-amber-300/20 bg-amber-300/15 px-3 py-1 text-[11px] font-mono font-bold text-amber-100">0</span>
+                                    </div>
+                                    <div id="approval-inbox-list" class="mt-4 space-y-3"></div>
+                                </section>
+                            </div>
+                        </div>
+
+                        <!-- Messages Area (Padding bottom leaves space for absolute input area) -->
+                        <div id="messages" class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 scroll-smooth"></div>
+
+                        <!-- Input Area -->
+                        <div class="p-4 md:p-6 bg-surface-container-low border-t border-white/5 shrink-0 z-10">
+                            <div class="max-w-4xl mx-auto relative">
+                                <div
+                                    class="bg-surface-container-highest border border-outline-variant/20 rounded-2xl p-2 focus-within:border-primary/50 transition-all shadow-2xl">
+                                    <div id="composer-attachments" class="hidden px-2 pb-2"></div>
+                                    <textarea id="chat-input"
+                                        class="w-full bg-transparent border-none text-on-surface text-sm focus:ring-0 placeholder-on-surface-variant resize-none px-4 py-2"
+                                        placeholder="Describe the task you want the agent to handle... (Shift+Enter for newline)"
+                                        rows="2" autofocus></textarea>
+                                    <div
+                                        class="flex justify-between items-center px-4 py-2 border-t border-outline-variant/10 mt-1">
+                                        <div class="flex gap-4 items-center">
+                                            <button id="upload-trigger-btn" title="上传文件"
+                                                class="inline-flex items-center gap-2 rounded-xl border border-outline-variant/20 bg-surface-container-high px-3 py-1.5 text-[11px] font-semibold text-on-surface hover:border-primary/40 hover:text-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-outline-variant/20 disabled:hover:text-on-surface">
+                                                <span class="material-symbols-outlined text-sm">upload_file</span>
+                                                <span>上传文件</span>
+                                            </button>
+                                            <input id="upload-input" class="hidden" type="file" multiple />
+                                            <span id="composer-state"
+                                                class="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider">READY</span>
+                                            <span id="composer-hint"
+                                                class="text-[10px] text-on-surface-variant">Enter to execute. Shift+Enter for newline.</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button id="intervene-btn" title="Interrupt and continue with your guidance"
+                                                class="hidden border border-amber-400/30 bg-amber-400/10 text-amber-200 px-4 py-1.5 rounded-xl font-bold text-xs items-center gap-2 hover:bg-amber-400/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-amber-400/10">
+                                                <span>INTERVENE</span>
+                                                <span class="material-symbols-outlined text-sm">gesture</span>
+                                            </button>
+                                            <button id="send-btn" title="Send (Enter)"
+                                                class="bg-primary hover:bg-primary-container text-on-primary px-4 py-1.5 rounded-xl font-bold text-xs flex items-center gap-2 hover:shadow-lg hover:shadow-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                                                <span>EXECUTE</span>
+                                                <span class="material-symbols-outlined text-sm">send</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Resizer 3 -->
+                    <div class="w-1 shrink-0 bg-white/5 hover:bg-primary/50 cursor-col-resize z-40 resizer transition-colors"
+                        data-prev="chat-view" data-next="shared-context-sidebar"></div>
+
+                    <!-- Right Pane: Details -->
+                    <section id="shared-context-sidebar"
+                        class="w-[360px] border-l border-white/5 flex flex-col bg-surface relative overflow-hidden transition-[width] duration-300 shrink-0">
+                        <button id="toggle-context"
+                            class="absolute top-3 right-3 p-1 text-on-surface-variant hover:text-white z-20"
+                            title="收起详情面板">
+                            <span class=" material-symbols-outlined text-sm">keyboard_double_arrow_right</span>
+                        </button>
+                        <!-- Tabs -->
+                        <div class="flex border-b border-white/5 shrink-0 pr-8 min-w-[360px]">
+                            <button
+                                data-sidebar-tab="runs"
+                                class="sidebar-tab-btn flex-1 py-4 text-[10px] font-bold uppercase tracking-widest text-primary border-b-2 border-primary">详情</button>
+                            <button
+                                data-sidebar-tab="context"
+                                class="sidebar-tab-btn flex-1 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant border-b-2 border-transparent hover:text-on-surface transition-colors">知识</button>
+                            <button
+                                data-sidebar-tab="learning"
+                                class="sidebar-tab-btn flex-1 py-4 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant border-b-2 border-transparent hover:text-on-surface transition-colors">学习</button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto w-full">
+                            <div id="runs-panel" class="p-6 space-y-6">
+                                <div class="hidden space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h3 class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest">任务状态</h3>
+                                            <p class="mt-1 text-xs text-on-surface-variant">这里会显示当前任务的简要状态。</p>
+                                        </div>
+                                        <button id="run-panel-refresh-btn"
+                                            class="inline-flex items-center gap-1 rounded-full border border-outline-variant/20 bg-surface-container-high px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.18em] text-on-surface-variant hover:text-primary hover:border-primary/40 transition-colors">
+                                            <span class="material-symbols-outlined text-sm">refresh</span>
+                                            <span>同步</span>
+                                        </button>
+                                    </div>
+                                    <div id="run-session-summary"
+                                        class="space-y-3 text-[10px] font-mono uppercase tracking-[0.18em]"></div>
+                                </div>
+
+                                <section id="session-uploads-shell"
+                                    class="rounded-3xl border border-primary/15 bg-[linear-gradient(140deg,rgba(0,238,252,0.10),rgba(16,19,25,0.96))] px-5 py-5 shadow-[0_16px_50px_rgba(0,238,252,0.08)]">
+                                    <div class="flex items-start justify-between gap-4">
+                                        <div>
+                                            <div class="text-[10px] font-mono uppercase tracking-[0.22em] text-primary/80">会话源文件</div>
+                                            <h3 class="mt-2 text-lg font-semibold text-on-surface">已上传文件</h3>
+                                            <p class="mt-2 text-sm leading-relaxed text-on-surface-variant">
+                                                当前会话的源文件会保留在这里。你可以重新附加到下一条消息，也可以直接预览、打开或下载核对内容。
+                                            </p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button id="session-uploads-refresh-btn"
+                                                class="inline-flex items-center gap-1 rounded-full border border-outline-variant/20 bg-surface-container-high px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.18em] text-on-surface-variant hover:text-primary hover:border-primary/40 transition-colors">
+                                                <span class="material-symbols-outlined text-sm">refresh</span>
+                                                <span>同步</span>
+                                            </button>
+                                            <span id="session-uploads-count"
+                                                class="inline-flex min-w-8 items-center justify-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-mono font-bold text-primary">0</span>
+                                        </div>
+                                    </div>
+                                    <div id="session-uploads-list" class="mt-4 space-y-3"></div>
+                                </section>
+
+                                <div id="run-active-card" class="space-y-3"></div>
+
+                                <div>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest">最近记录</h3>
+                                        <span id="run-history-count"
+                                            class="bg-secondary/15 text-secondary px-2 rounded-full text-[10px] font-mono font-bold">0</span>
+                                    </div>
+                                    <div id="run-history-list" class="space-y-3"></div>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest">详细过程</h3>
+                                        <span id="run-detail-pill"
+                                            class="hidden bg-primary/15 text-primary px-2 rounded-full text-[10px] font-mono font-bold uppercase tracking-widest"></span>
+                                    </div>
+                                    <div id="run-detail-panel" class="space-y-4"></div>
+                                </div>
+                            </div>
+
+                            <!-- Context Window -->
+                            <div id="context-panel" class="hidden p-6 space-y-6">
+                                <div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <h3
+                                            class="text-[10px] font-mono text-on-surface-variant uppercase tracking-widest">
+                                            会话
+                                            知识</h3>
+                                        <span id="shared-context-count"
+                                            class="bg-primary/20 text-primary px-2 rounded-full text-[10px] font-mono font-bold">0</span>
+                                    </div>
+                                    <div id="shared-context-list" class="space-y-3">
+                                        <!-- Context Items Go Here -->
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 flex flex-col gap-2 relative opacity-50 pointer-events-none">
+                                    <div class="flex items-center justify-between px-2">
+                                        <span class="text-[10px] text-on-surface-variant">流程状态：</span>
+                                        <span class="text-[10px] font-bold text-primary">等待中</span>
+                                    </div>
+                                    <div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+                                        <div class="bg-primary h-full w-[0%]"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="learning-panel" class="hidden p-6 space-y-6"></div>
+                        </div>
+                    </section>
+                </div><!-- End View: Orchestrator -->
+
+                <!-- Marketplace View -->
+                <div id="view-agent-marketplace" class="dynamic-view flex-1 overflow-y-auto w-full h-full hidden">
+                    <!-- content injected by JS -->
+                </div>
+
+                <!-- Memory View -->
+                <div id="view-memory" class="dynamic-view flex-1 overflow-y-auto w-full h-full hidden">
+                    <!-- content injected by JS -->
+                </div>
+
+                <!-- Integrations View -->
+                <div id="view-system-integrations" class="dynamic-view flex-1 overflow-y-auto w-full h-full hidden">
+                    <!-- content injected by JS -->
+                </div>
+
+                <!-- Scheduled Tasks View -->
+                <div id="view-scheduled-tasks" class="dynamic-view flex-1 overflow-y-auto w-full h-full hidden">
+                    <!-- content injected by JS -->
+                </div>
+
+            </div><!-- End Dynamic Views Container -->
+        </main>
+
+        <!-- Float Expand Session -->
+        <button id="btn-expand-session"
+            class="fixed left-0 top-1/2 mt-20 -translate-y-1/2 w-4 h-16 bg-surface-container-highest hover:bg-primary/20 border border-white/10 border-l-0 rounded-r-xl z-50 flex items-center justify-center hidden group cursor-pointer transition-all duration-300"
+            title="收起会话列表">
+            <span
+                class="material-symbols-outlined text-[10px] text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+        </button>
+        <!-- Float Expand Context -->
+        <button id="btn-expand-context"
+            class="fixed right-0 top-1/2 -translate-y-1/2 w-4 h-16 bg-surface-container-highest hover:bg-primary/20 border border-white/10 border-r-0 rounded-l-xl z-50 flex items-center justify-center hidden group cursor-pointer"
+            title="打开详情面板">
+            <span class=" material-symbols-outlined text-[10px] text-on-surface-variant group-hover:text-primary
+            transition-colors">chevron_left</span>
+        </button>
+    </div>
+
+    <div id="file-preview-modal"
+        class="fixed inset-0 z-[90] hidden items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+        <div
+            class="flex max-h-[88vh] w-full max-w-5xl flex-col overflow-hidden rounded-[28px] border border-outline-variant/15 bg-surface shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+            <div class="flex items-start justify-between gap-4 border-b border-outline-variant/10 px-5 py-4">
+                <div class="min-w-0">
+                    <div class="text-[10px] font-mono uppercase tracking-[0.22em] text-primary/80">文件预览</div>
+                    <h3 id="file-preview-title" class="mt-2 break-all text-lg font-semibold text-on-surface">文件预览</h3>
+                    <p id="file-preview-meta" class="mt-2 text-sm text-on-surface-variant"></p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a id="file-preview-open-btn"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="hidden inline-flex items-center gap-2 rounded-xl border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-[11px] font-semibold text-on-surface transition-colors hover:border-primary/40 hover:text-primary">
+                        <span class="material-symbols-outlined text-sm">open_in_new</span>
+                        <span>打开原文件</span>
+                    </a>
+                    <a id="file-preview-download-btn"
+                        class="hidden inline-flex items-center gap-2 rounded-xl border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-[11px] font-semibold text-on-surface transition-colors hover:border-primary/40 hover:text-primary">
+                        <span class="material-symbols-outlined text-sm">download</span>
+                        <span>下载文件</span>
+                    </a>
+                    <button id="file-preview-close-btn"
+                        class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-outline-variant/20 bg-surface-container-highest text-on-surface-variant transition-colors hover:border-primary/40 hover:text-on-surface"
+                        title="关闭预览">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
+            </div>
+            <div id="file-preview-body" class="min-h-[220px] overflow-auto px-5 py-5"></div>
+        </div>
+    </div>
+
+    <!-- Hidden backward compatibility elements for app.js before we refactor it -->
+    <div style="display: none !important;">
+        <div id="pane-nav"></div>
+        <button id="toggle-nav"></button>
+        <button id="btn-expand-nav"></button>
+        <div id="status-text"></div>
+        <button id="home-btn"></button>
+        <button id="new-session-btn"></button>
+        <div id="sidebar-toggle"></div>
+        <button id="shared-context-toggle"></button>
+        <section id="home-view"></section>
+        <section id="workspace-view"></section>
+        <template id="welcome-template">
+            <div></div>
+        </template>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <script>
+        window.__CLAVI_STATIC_VERSION__ = "20260419-integrations-controls-3";
+    </script>
+    <script src="/static/run_dag_view.js?v=20260419-integrations-controls-3"></script>
+    <script src="/static/app.js?v=20260419-integrations-controls-3"></script>
+</body>
+
+</html>
+

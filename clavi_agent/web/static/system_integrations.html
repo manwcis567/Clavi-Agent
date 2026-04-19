@@ -1,0 +1,519 @@
+﻿<div id="integrations-page" class="text-on-surface h-full flex flex-col bg-surface overflow-hidden relative">
+
+    <!-- View 1: Catalog -->
+    <div id="integrations-catalog-view" class="h-full overflow-y-auto p-8 relative flex-1 transition-opacity duration-300">
+        <div class="absolute inset-x-0 top-0 h-96 pointer-events-none">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_78%_42%,rgba(0,240,255,0.06),transparent_58%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_68%_65%,rgba(213,117,255,0.05),transparent_42%)]"></div>
+            <div class="absolute right-[10%] top-[40%] h-[1px] w-[30%] bg-gradient-to-l from-primary/20 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto mt-8">
+            <div class="flex flex-col gap-2">
+                <p class="text-[10px] font-bold uppercase tracking-[0.26em] text-primary">Channel Control Plane</p>
+                <h1 class="font-headline text-4xl font-bold leading-[1.1] text-white">
+                    集成中心 <span class="italic text-[#d575ff]">Integrations</span>
+                </h1>
+                <p class="mt-4 max-w-2xl text-[14px] leading-relaxed text-on-surface-variant">
+                    将外部渠道接入 Clavi Agent 的执行主链路。集中管理渠道配置、会话绑定、基础路由规则以及入站/回写日志。
+                </p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 mb-10 border-b border-white/5 pb-8">
+                <div class="rounded-2xl border border-white/5 bg-surface-container-low px-5 py-5 shadow-sm">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">已启用</div>
+                    <div id="summary-active-count" class="mt-3 text-3xl font-bold text-white">0</div>
+                    <div class="mt-2 text-xs text-on-surface-variant">当前可以接收渠道事件的集成数量</div>
+                </div>
+                <div class="rounded-2xl border border-white/5 bg-surface-container-low px-5 py-5 shadow-sm">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">异常状态</div>
+                    <div id="summary-error-count" class="mt-3 text-3xl font-bold text-[#ff8f8f]">0</div>
+                    <div class="mt-2 text-xs text-on-surface-variant">最近验证失败或回写失败的集成数量</div>
+                </div>
+                <div class="rounded-2xl border border-white/5 bg-surface-container-low px-5 py-5 shadow-sm">
+                    <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">最近活动</div>
+                    <div id="summary-last-activity" class="mt-3 text-lg font-semibold text-white truncate">暂无记录</div>
+                    <div class="mt-2 text-xs text-on-surface-variant">取最近一条入站或回写日志时间</div>
+                </div>
+            </div>
+
+            <!-- Grid of Channels -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 pb-8">
+                <!-- Feishu -->
+                <button type="button" class="group text-left p-6 rounded-[24px] border border-white/5 bg-surface-container hover:bg-surface-container-high hover:border-primary/40 transition-all shadow-[0_4px_24px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_32px_rgba(0,240,255,0.1)] relative overflow-hidden" data-catalog-item="feishu">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-symbols-outlined text-6xl text-primary transform group-hover:scale-110 transition-transform duration-500">forum</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 backdrop-blur-sm">
+                        <span class="material-symbols-outlined text-primary">forum</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">飞书 (Feishu)</h3>
+                    <p class="text-xs text-on-surface-variant leading-relaxed mb-4">通过长连接或 Webhook 接入飞书自建应用，支持消息首发、回复与多模态文件。</p>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Available</span>
+                </button>
+
+                <!-- WeChat -->
+                <button type="button" class="group text-left p-6 rounded-[24px] border border-white/5 bg-surface-container hover:bg-surface-container-high hover:border-[#48d597]/40 transition-all shadow-[0_4px_24px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_32px_rgba(72,213,151,0.12)] relative overflow-hidden" data-catalog-item="wechat">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-symbols-outlined text-6xl text-[#7af2be] transform group-hover:scale-110 transition-transform duration-500">qr_code_2</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-[#48d597]/10 border border-[#48d597]/20 flex items-center justify-center mb-4 backdrop-blur-sm">
+                        <span class="material-symbols-outlined text-[#7af2be]">qr_code_2</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">微信 (WeChat)</h3>
+                    <p class="text-xs text-on-surface-variant leading-relaxed mb-4">通过腾讯官方 OpenClaw 安装器完成扫码登录，在控制台内直接展示终端二维码并绑定默认 Agent。当前按官方说明仅支持私聊接入。</p>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[#7af2be] bg-[#48d597]/10 px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-[#48d597]"></span> QR Setup</span>
+                </button>
+
+                <!-- Mock -->
+                <button type="button" class="group text-left p-6 rounded-[24px] border border-white/5 bg-surface-container hover:bg-surface-container-high hover:border-secondary/40 transition-all shadow-[0_4px_24px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_32px_rgba(213,117,255,0.1)] relative overflow-hidden" data-catalog-item="mock">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <span class="material-symbols-outlined text-6xl text-secondary transform group-hover:scale-110 transition-transform duration-500">bug_report</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center mb-4 backdrop-blur-sm">
+                        <span class="material-symbols-outlined text-secondary">bug_report</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Mock Webhook</h3>
+                    <p class="text-xs text-on-surface-variant leading-relaxed mb-4">用于本地开发与 API 测试，支持模拟标准入站负载格式，进行快速联调。</p>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-400/10 px-2.5 py-1 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Available</span>
+                </button>
+
+                <!-- Slack -->
+                <button type="button" class="group text-left p-6 rounded-[24px] border border-white/5 bg-surface-container-lowest opacity-60 cursor-not-allowed transition-all relative overflow-hidden" disabled>
+                    <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-white/50">mark_chat_unread</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white/50 mb-2">Slack</h3>
+                    <p class="text-xs text-on-surface-variant/50 leading-relaxed mb-4">Connect agents to Slack workspaces via bot token and Events API.</p>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-full">Coming Soon</span>
+                </button>
+
+                <!-- Discord -->
+                <button type="button" class="group text-left p-6 rounded-[24px] border border-white/5 bg-surface-container-lowest opacity-60 cursor-not-allowed transition-all relative overflow-hidden" disabled>
+                    <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-white/50">sports_esports</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white/50 mb-2">Discord</h3>
+                    <p class="text-xs text-on-surface-variant/50 leading-relaxed mb-4">Enable agents to moderate channels and respond to user queries.</p>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-full">Coming Soon</span>
+                </button>
+
+                <!-- GitHub -->
+                <button type="button" class="group text-left p-6 rounded-[24px] border border-white/5 bg-surface-container-lowest opacity-60 cursor-not-allowed transition-all relative overflow-hidden" disabled>
+                    <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-white/50">code</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white/50 mb-2">GitHub</h3>
+                    <p class="text-xs text-on-surface-variant/50 leading-relaxed mb-4">Respond to PRs, issues, and code reviews automatically.</p>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-full">Coming Soon</span>
+                </button>
+                
+                <!-- Figma -->
+                <button type="button" class="group text-left p-6 rounded-[24px] border border-white/5 bg-surface-container-lowest opacity-60 cursor-not-allowed transition-all relative overflow-hidden" disabled>
+                    <div class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-white/50">draw</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white/50 mb-2">Figma</h3>
+                    <p class="text-xs text-on-surface-variant/50 leading-relaxed mb-4">Integrate agent capabilities natively into Figma designs.</p>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant bg-white/5 px-2.5 py-1 rounded-full">Coming Soon</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View 2: Management View (Hidden by default) -->
+    <div id="integrations-management-view" class="hidden h-full flex flex-row relative z-20 w-full overflow-hidden bg-surface-container-lowest">
+        <!-- Sidebar -->
+        <div class="w-[300px] shrink-0 border-r border-white/5 bg-surface-container-low flex flex-col h-full overflow-hidden">
+            <div class="p-4 border-b border-white/5 flex items-center gap-3 shrink-0 h-[72px]">
+                <button id="back-to-catalog-btn" class="w-8 h-8 rounded-full bg-black/20 hover:bg-white/10 flex items-center justify-center text-on-surface-variant hover:text-white transition-colors" title="返回目录">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                </button>
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Instances</span>
+                    <span id="management-kind-title" class="text-sm font-bold text-white uppercase tracking-wider">Feishu</span>
+                </div>
+            </div>
+            <div class="p-4 shrink-0 border-b border-white/5">
+                <button id="integrations-new-btn" class="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-3 text-sm font-bold text-primary transition-all hover:bg-primary hover:text-[#00363b] hover:shadow-[0_0_12px_rgba(0,240,255,0.3)]">
+                    <span class="material-symbols-outlined text-[18px]">add_link</span>
+                    新建实例
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <div id="integrations-list" class="flex flex-col gap-2"></div>
+            </div>
+        </div>
+
+        <!-- Main Configuration Area -->
+        <div class="flex-1 overflow-hidden flex flex-col relative bg-surface h-full">
+            <div class="shrink-0 pt-8 px-10 pb-0 border-b border-white/5 bg-surface/80 backdrop-blur-md sticky top-0 z-30">
+                <div class="flex flex-col gap-4 max-w-5xl mx-auto">
+                    <!-- Title Row -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-primary" id="integration-panel-subtitle">Setup & Configuration</div>
+                            <h2 id="integration-panel-title" class="mt-1 text-2xl font-headline font-bold text-white">新建集成</h2>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                             <div id="integration-current-status" class="inline-flex items-center rounded-full border border-outline-variant/20 bg-black/20 px-3 py-1 text-[11px] font-bold text-on-surface-variant tracking-wider">
+                                尚未保存
+                            </div>
+                            <div class="flex gap-2">
+                                <button id="integration-enable-btn" type="button" class="hidden inline-flex items-center gap-1 rounded-lg border border-emerald-400/20 bg-emerald-400/10 px-2 py-1 text-[10px] font-bold text-emerald-300 transition-colors hover:bg-emerald-400/20">
+                                    <span class="material-symbols-outlined text-[14px]">play_circle</span>启用
+                                </button>
+                                <button id="integration-disable-btn" type="button" class="hidden inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-bold text-on-surface transition-colors hover:border-white/20">
+                                    <span class="material-symbols-outlined text-[14px]">pause_circle</span>停用
+                                </button>
+                                <button id="integration-delete-btn" type="button" class="hidden inline-flex items-center gap-1 rounded-lg border border-error/20 bg-error/10 px-2 py-1 text-[10px] font-bold text-error transition-colors hover:bg-error/20" title="删除当前集成">
+                                    <span class="material-symbols-outlined text-[14px]">delete</span>删除
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabs Navigation -->
+                    <div class="flex gap-6 mt-4">
+                        <button class="management-tab active pb-3 text-sm font-bold text-primary border-b-2 border-primary tracking-wide transition-colors" data-tab="config">基础配置</button>
+                        <button class="management-tab pb-3 text-sm font-bold text-on-surface-variant border-b-2 border-transparent hover:text-white transition-colors tracking-wide" data-tab="routing">分发规则 (Routing)</button>
+                        <button class="management-tab pb-3 text-sm font-bold text-on-surface-variant border-b-2 border-transparent hover:text-white transition-colors tracking-wide" data-tab="logs">状态与日志 (Logs)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-10 relative">
+                <div class="max-w-5xl mx-auto h-full">
+
+                    <!-- TAB: Configuration -->
+                    <div id="tab-config" class="tab-content block space-y-8 pb-10">
+                        <form id="integration-form" class="space-y-6">
+                            <input id="integration-id" type="hidden" value="">
+                            <input id="integration-kind" type="hidden" value="">
+
+                            <!-- Base Info Grid -->
+                            <div id="integration-base-info-section" class="grid grid-cols-1 gap-5 md:grid-cols-2 p-6 rounded-[20px] bg-surface-container-low border border-white/5 shadow-sm">
+                                <div id="integration-name-field" class="hidden">
+                                    <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">名称</label>
+                                    <input id="integration-name" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50" placeholder="例如：Mock Channel">
+                                </div>
+                                <div id="integration-display-name-field">
+                                    <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">展示名称</label>
+                                    <input id="integration-display-name" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50" placeholder="用于列表与日志展示">
+                                </div>
+                                <div id="integration-tenant-field" class="hidden">
+                                    <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">Tenant / 应用标识</label>
+                                    <input id="integration-tenant-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50" placeholder="可留空，按渠道实际情况填写">
+                                </div>
+                            </div>
+
+                            <!-- Feishu Basic Section -->
+                            <div id="integration-feishu-basic-section" class="hidden rounded-[20px] border border-primary/20 bg-[linear-gradient(135deg,rgba(0,240,255,0.03),transparent)] p-6 shadow-sm">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <span class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20"><span class="material-symbols-outlined text-sm">vpn_key</span></span>
+                                    <div>
+                                        <h3 class="text-sm font-bold text-white">飞书长连接接入</h3>
+                                        <p class="mt-1 text-xs text-on-surface-variant">只需 App ID 与 App Secret 即可完成基础通讯，无需额外公网回调地址。</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                                    <div>
+                                        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">App ID</label>
+                                        <input id="integration-feishu-app-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50 font-mono" placeholder="cli_...">
+                                    </div>
+                                    <div>
+                                        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">App Secret</label>
+                                        <input id="integration-feishu-app-secret" type="password" autocomplete="new-password" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50 font-mono" placeholder="新建时必填">
+                                        <p id="integration-feishu-app-secret-status" class="mt-2 text-[10px] text-on-surface-variant"></p>
+                                    </div>
+                                    <div>
+                                        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">默认 Chat ID</label>
+                                        <input id="integration-feishu-default-chat-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50 font-mono" placeholder="oc_xxx / chat_xxx">
+                                        <p class="mt-2 text-[10px] text-on-surface-variant">可留空；首次收到飞书消息后系统会自动回填，供定时任务和主动通知默认投递使用。</p>
+                                    </div>
+                                    <div>
+                                        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">默认 Thread ID（可选）</label>
+                                        <input id="integration-feishu-default-thread-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50 font-mono" placeholder="message_xxx">
+                                        <p class="mt-2 text-[10px] text-on-surface-variant">需要固定回复到某个话题串时再填写。</p>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">绑定默认 Agent</label>
+                                        <select id="integration-default-agent-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"></select>
+                                        <p class="mt-2 text-xs text-on-surface-variant">所有未匹配高级路由规则的会话，将默认投递至该 Agent。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- WeChat QR Setup Section -->
+                            <div id="integration-wechat-basic-section" class="hidden rounded-[20px] border border-[#48d597]/20 bg-[linear-gradient(135deg,rgba(72,213,151,0.08),rgba(7,12,9,0.96))] p-6 shadow-sm">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <span class="w-8 h-8 rounded-full bg-[#48d597]/10 flex items-center justify-center text-[#7af2be] border border-[#48d597]/20"><span class="material-symbols-outlined text-sm">qr_code_2</span></span>
+                                    <div>
+                                        <h3 class="text-sm font-bold text-white">微信扫码接入</h3>
+                                        <p class="mt-1 text-xs text-on-surface-variant">调用腾讯官方 OpenClaw 安装器生成终端二维码。你只需要选择默认 Agent，然后在当前页面扫码完成配对。</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-5">
+                                    <div>
+                                        <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">绑定默认 Agent</label>
+                                        <select id="integration-wechat-default-agent-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-[#48d597]/50"></select>
+                                        <p class="mt-2 text-xs text-on-surface-variant">扫码成功后，新的微信私聊会默认路由到这个 Agent。</p>
+                                    </div>
+
+                                    <div class="rounded-[20px] border border-white/8 bg-black/25 p-5">
+                                        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                                            <div class="flex flex-col gap-2">
+                                                <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-[#7af2be]">Pairing Status</div>
+                                                <div id="integration-wechat-setup-badge" class="inline-flex w-fit items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-bold text-on-surface-variant">Idle</div>
+                                            </div>
+                                            <button id="integration-wechat-setup-btn" type="button" class="inline-flex items-center gap-2 rounded-xl border border-[#48d597]/30 bg-[#48d597]/10 px-4 py-2.5 text-sm font-bold text-[#7af2be] transition-colors hover:bg-[#48d597]/20">
+                                                <span class="material-symbols-outlined text-[18px]">qr_code_scanner</span>
+                                                开始扫码连接
+                                            </button>
+                                        </div>
+
+                                        <p id="integration-wechat-setup-message" class="mt-4 text-sm leading-relaxed text-on-surface-variant">保存默认 Agent 后，点击“开始扫码连接”生成二维码。</p>
+
+                                        <div class="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)]">
+                                            <div class="rounded-[20px] border border-white/10 bg-white p-4 shadow-[0_12px_40px_rgba(0,0,0,0.18)]">
+                                                <div class="flex items-center justify-between gap-3 border-b border-black/10 pb-3">
+                                                    <div class="text-[11px] font-bold uppercase tracking-[0.18em] text-black/60">QR Code</div>
+                                                    <div class="text-[10px] font-semibold uppercase tracking-[0.18em] text-black/35">Native iLink</div>
+                                                </div>
+                                                <div class="mt-4 min-h-[280px] rounded-[16px] border border-dashed border-black/10 bg-white p-3">
+                                                    <div id="integration-wechat-qr-empty" class="flex min-h-[248px] items-center justify-center text-center text-xs leading-relaxed text-black/45">
+                                                        二维码生成后会显示在这里。
+                                                    </div>
+                                                    <pre id="integration-wechat-qr-text" class="hidden overflow-auto whitespace-pre text-[7px] leading-[7px] text-black"></pre>
+                                                </div>
+                                            </div>
+
+                                            <div class="rounded-[20px] border border-white/10 bg-black/30 p-4">
+                                                <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+                                                    <div class="text-[11px] font-bold uppercase tracking-[0.18em] text-on-surface-variant">Login Log</div>
+                                                    <div class="text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant/60">WeChat iLink</div>
+                                                </div>
+                                                <pre id="integration-wechat-setup-output" class="mt-4 max-h-[320px] overflow-auto whitespace-pre-wrap rounded-[16px] bg-black/35 px-4 py-4 text-xs leading-relaxed text-on-surface-variant">尚未启动微信扫码安装器。</pre>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-4 flex flex-col gap-2 text-[11px] text-on-surface-variant md:flex-row md:items-center md:justify-between">
+                                            <div id="integration-wechat-openclaw-version">Bot ID pending</div>
+                                            <div id="integration-wechat-plugin-spec">Base URL pending</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Webhook URL Display -->
+                            <div id="integration-webhook-section" class="rounded-[20px] border border-white/5 bg-surface-container-low p-6 shadow-sm">
+                                <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-4">
+                                    <div>
+                                        <h3 id="integration-endpoint-title" class="text-sm font-bold text-white">接入地址</h3>
+                                        <p id="integration-endpoint-hint" class="mt-1 text-xs text-on-surface-variant">Mock 或 Webhook 模式的本地端点回调地址。</p>
+                                    </div>
+                                    <button id="integration-copy-webhook-btn" type="button" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-on-surface transition-colors hover:border-primary/40 hover:text-primary">
+                                        <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                                        <span id="integration-copy-webhook-label">复制地址</span>
+                                    </button>
+                                </div>
+                                <input id="integration-webhook-url" readonly class="w-full rounded-xl border border-outline-variant/20 bg-black/30 px-4 py-3 font-mono text-xs text-primary/80 outline-none">
+                            </div>
+
+                            <!-- Advanced Config JSON & Credentials -->
+                            <div id="integration-credentials-section" class="hidden rounded-[20px] border border-white/5 bg-surface-container-low p-6 shadow-sm">
+                                <div class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-sm font-bold text-white">高级凭证引用</h3>
+                                        <p id="integration-credential-hint" class="mt-1 text-xs text-on-surface-variant">推荐使用环境变量引用；前端修改时只更新填写项。</p>
+                                    </div>
+                                    <button id="integration-add-credential-btn" type="button" class="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary transition-colors hover:bg-primary/20">
+                                        <span class="material-symbols-outlined text-[16px]">add</span>新增凭证
+                                    </button>
+                                </div>
+                                <div id="integration-credential-rows" class="flex flex-col gap-3"></div>
+                            </div>
+
+                            <div id="integration-config-section" class="hidden">
+                                <label class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">渠道配置 JSON</label>
+                                <textarea id="integration-config-json" rows="6" class="w-full rounded-2xl border border-outline-variant/20 bg-surface-container-low px-4 py-4 font-mono text-xs leading-relaxed text-white outline-none transition-colors focus:border-primary/50"></textarea>
+                            </div>
+
+                            <!-- Actions Footer -->
+                            <div class="sticky bottom-0 bg-surface/90 backdrop-blur-md pt-4 pb-0 z-10 border-t border-white/5 mt-8">
+                                <div class="flex items-center gap-4">
+                                    <button id="integration-save-btn" type="submit" class="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-[#00363b] shadow-[0_0_16px_rgba(0,240,255,0.22)] transition-all hover:bg-[#6af7ff]">
+                                        <span class="material-symbols-outlined text-[18px]">save</span>保存配置
+                                    </button>
+                                    <button id="integration-verify-btn" type="button" class="inline-flex items-center gap-2 rounded-xl border border-secondary/20 bg-secondary/10 px-5 py-3 text-sm font-bold text-secondary transition-colors hover:bg-secondary/20">
+                                        <span class="material-symbols-outlined text-[18px]">rule</span>强制校验 / 唤醒
+                                    </button>
+                                </div>
+                                <div id="integration-form-feedback" class="mt-4 rounded-xl border border-outline-variant/10 bg-black/20 px-4 py-2.5 text-xs text-on-surface-variant w-full"></div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- TAB: Routing & Bindings -->
+                    <div id="tab-routing" class="tab-content hidden space-y-8 pb-10">
+                        <section class="rounded-[24px] border border-white/5 bg-surface-container-low p-6 shadow-sm relative overflow-hidden">
+                            <div class="absolute inset-x-0 h-1 top-0 bg-gradient-to-r from-secondary/40 to-transparent"></div>
+                            <div class="flex items-start justify-between mb-6">
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">静态会话绑定 (Bindings)</h3>
+                                    <p class="mt-1 text-xs text-on-surface-variant">当渠道会话发生在此 Chat 或 Thread 范围内时，强制绑定到特定 Agent。</p>
+                                </div>
+                                <button id="binding-reset-btn" type="button" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-on-surface transition-colors hover:border-primary/40 hover:text-primary">
+                                    <span class="material-symbols-outlined text-[16px]">ink_eraser</span>重置表单
+                                </button>
+                            </div>
+                            <form id="binding-form" class="grid grid-cols-1 gap-4 md:grid-cols-2 bg-black/20 p-5 rounded-2xl border border-white/5 mb-6">
+                                <input id="binding-id" type="hidden" value="">
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">Chat ID (必填)</label>
+                                    <input id="binding-chat-id" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50">
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">Thread ID</label>
+                                    <input id="binding-thread-id" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50">
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">Tenant ID</label>
+                                    <input id="binding-tenant-id" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50">
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">绑定域 (Scope)</label>
+                                    <select id="binding-scope" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50">
+                                        <option value="chat">Chat 级别</option>
+                                        <option value="thread">Thread 级别</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">目标 Agent</label>
+                                    <select id="binding-agent-id" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50"></select>
+                                </div>
+                                <div class="md:col-span-2 flex items-center justify-between mt-2">
+                                    <label class="inline-flex items-center gap-2 text-xs text-on-surface-variant cursor-pointer">
+                                        <input id="binding-refresh-session" type="checkbox" class="rounded border-white/20 bg-black text-primary focus:ring-0 w-3.5 h-3.5">
+                                        开启后自动清除历史上下文 Session
+                                    </label>
+                                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-secondary/20 border border-secondary/20 px-4 py-2 text-xs font-bold text-secondary transition-all hover:bg-secondary/30">
+                                        <span class="material-symbols-outlined text-[16px]">playlist_add_check</span>保存绑定
+                                    </button>
+                                </div>
+                            </form>
+                            <div id="bindings-list" class="flex flex-col gap-3"></div>
+                        </section>
+
+                        <section class="rounded-[24px] border border-white/5 bg-surface-container-low p-6 shadow-sm relative overflow-hidden">
+                            <div class="absolute inset-x-0 h-1 top-0 bg-gradient-to-r from-primary/40 to-transparent"></div>
+                            <div class="flex items-start justify-between mb-6">
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">动态路由规则 (Routing)</h3>
+                                    <p class="mt-1 text-xs text-on-surface-variant">根据优先级和模式匹配，动态分配给不同的智能处理 Agent。</p>
+                                </div>
+                                <button id="routing-reset-btn" type="button" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-on-surface transition-colors hover:border-primary/40 hover:text-primary">
+                                    <span class="material-symbols-outlined text-[16px]">ink_eraser</span>重置表单
+                                </button>
+                            </div>
+                            <form id="routing-form" class="grid grid-cols-1 gap-4 md:grid-cols-2 bg-black/20 p-5 rounded-2xl border border-white/5 mb-6">
+                                <input id="routing-rule-id" type="hidden" value="">
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">优先级 (数值越大越优先)</label>
+                                    <input id="routing-priority" type="number" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50" value="100">
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">上下文保留策略</label>
+                                    <select id="routing-session-strategy" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50">
+                                        <option value="reuse">Reuse - 一直复用</option>
+                                        <option value="chat">Chat - 换群新开</option>
+                                        <option value="thread">Thread - 换线程新开</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">匹配规则向度</label>
+                                    <select id="routing-match-type" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50">
+                                        <option value="integration_id">Integration ID (全部匹配)</option>
+                                        <option value="chat_id">Chat ID 精确</option>
+                                        <option value="thread_id">Thread ID 精确</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">匹配值输入 (* 为通配)</label>
+                                    <input id="routing-match-value" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="mb-1 block text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant">目标 Agent</label>
+                                    <select id="routing-agent-id" class="w-full rounded-lg border border-outline-variant/20 bg-surface-container-highest px-3 py-2 text-xs text-white outline-none focus:border-primary/50"></select>
+                                </div>
+                                <div class="md:col-span-2 flex items-center justify-between mt-2">
+                                    <label class="inline-flex items-center gap-2 text-xs text-on-surface-variant cursor-pointer">
+                                        <input id="routing-enabled" type="checkbox" checked class="rounded border-white/20 bg-black text-primary focus:ring-0 w-3.5 h-3.5">
+                                        保存后立即启用
+                                    </label>
+                                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-primary/20 border border-primary/20 px-4 py-2 text-xs font-bold text-primary transition-all hover:bg-primary/30">
+                                        <span class="material-symbols-outlined text-[16px]">alt_route</span>保存规则
+                                    </button>
+                                </div>
+                            </form>
+                            <div id="routing-rules-list" class="flex flex-col gap-3"></div>
+                        </section>
+                    </div>
+
+                    <!-- TAB: Logs -->
+                    <div id="tab-logs" class="tab-content hidden h-full flex flex-col xl:flex-row gap-6 pb-10">
+                        <section class="flex-1 rounded-[24px] border border-white/5 bg-surface-container-low p-6 shadow-sm flex flex-col h-full overflow-hidden">
+                            <div class="flex items-center justify-between mb-4 border-b border-white/5 pb-4 shrink-0">
+                                <div>
+                                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-emerald-400 text-[18px]">input</span>
+                                        入站原始事件 (Inbound)
+                                    </h3>
+                                </div>
+                                <div class="flex gap-2">
+                                    <select id="events-status-filter" class="w-24 rounded-lg border border-outline-variant/20 bg-black/20 px-2 py-1 text-[10px] text-white outline-none">
+                                        <option value="">全部</option>
+                                        <option value="received">收到</option>
+                                        <option value="routed">已路由</option>
+                                        <option value="failed">失败</option>
+                                    </select>
+                                    <button id="events-refresh-btn" class="w-7 h-7 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[14px]">refresh</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="integration-events-list" class="flex-1 overflow-y-auto pr-2 flex flex-col gap-2"></div>
+                        </section>
+
+                        <section class="flex-1 rounded-[24px] border border-white/5 bg-surface-container-low p-6 shadow-sm flex flex-col h-full overflow-hidden">
+                            <div class="flex items-center justify-between mb-4 border-b border-white/5 pb-4 shrink-0">
+                                <div>
+                                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-secondary text-[18px]">output</span>
+                                        回写投递队列 (Outbound)
+                                    </h3>
+                                </div>
+                                <div class="flex gap-2">
+                                    <select id="deliveries-status-filter" class="w-24 rounded-lg border border-outline-variant/20 bg-black/20 px-2 py-1 text-[10px] text-white outline-none">
+                                        <option value="">全部</option>
+                                        <option value="pending">排队中</option>
+                                        <option value="delivered">已投递</option>
+                                        <option value="failed">错误</option>
+                                    </select>
+                                    <button id="deliveries-refresh-btn" class="w-7 h-7 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-[14px]">refresh</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="integration-deliveries-list" class="flex-1 overflow-y-auto pr-2 flex flex-col gap-2"></div>
+                        </section>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

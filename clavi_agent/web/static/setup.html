@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>API Settings | Clavi Agent</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0c0e11;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #23262a;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #46484b;
+        }
+
+        .data-grid-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(143, 245, 255, 0.04) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+
+        .setup-input:focus,
+        .setup-select:focus {
+            outline: none;
+            border-color: rgba(143, 245, 255, 0.55);
+            box-shadow: 0 0 0 2px rgba(143, 245, 255, 0.08);
+        }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(17, 20, 23, 0.8);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(143, 245, 255, 0.1);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        surface: "#0c0e11",
+                        "surface-container-lowest": "#000000",
+                        "surface-container-low": "#111417",
+                        "surface-container": "#171a1d",
+                        "surface-container-high": "#1d2024",
+                        "surface-container-highest": "#23262a",
+                        "on-surface": "#f9f9fd",
+                        "on-surface-variant": "#aaabaf",
+                        outline: "#747579",
+                        "outline-variant": "#46484b",
+                        primary: "#8ff5ff",
+                        "primary-dim": "#00deec",
+                        secondary: "#d575ff",
+                        error: "#ff716c",
+                    },
+                    fontFamily: {
+                        headline: ["Space Grotesk"],
+                        body: ["Inter"],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="min-h-screen bg-surface text-on-surface font-body data-grid-bg">
+    <!-- TopAppBar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#0c0e11] border-b border-white/5 flex justify-between items-center w-full px-6 h-16">
+        <div class="flex items-center gap-6">
+            <div>
+                <h1 class="text-xl font-bold tracking-tighter text-[#00F0FF] uppercase font-['Space_Grotesk'] cursor-pointer">
+                    <a href="/" class="hover:text-cyan-300 transition-colors">Clavi Agent</a>
+                </h1>
+                <div class="text-[9px] font-semibold uppercase tracking-[0.28em] text-primary">The key to next-gen intelligent action</div>
+            </div>
+            <a href="/static/workspace.html" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/5 bg-white/5 text-[11px] font-bold text-on-surface-variant hover:text-primary hover:border-primary/20 hover:bg-primary/5 transition-all group">
+                <span class="material-symbols-outlined text-sm group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+                返回工作区
+            </a>
+            <a href="/static/agent_routing.html" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/5 bg-white/5 text-[11px] font-bold text-on-surface-variant hover:text-primary hover:border-primary/20 hover:bg-primary/5 transition-all group">
+                <span class="material-symbols-outlined text-sm">device_hub</span>
+                Agent API 组
+            </a>
+        </div>
+        <div class="flex items-center gap-4">
+            <div id="runtime-badge" class="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-primary">
+                Loading
+            </div>
+            <div class="relative group" id="account-menu-wrapper">
+                <div id="account-avatar" class="w-8 h-8 rounded-full border border-primary/20 bg-primary/10 flex items-center justify-center text-primary font-bold text-xs uppercase">?</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="fixed top-16 bottom-0 left-0 right-0 flex overflow-hidden w-full h-[calc(100vh-64px)] bg-surface-container-lowest">
+        <!-- Sidebar: Saved Configs (Mirrored from scheduled_tasks) -->
+        <aside class="w-[320px] shrink-0 border-r border-white/5 bg-surface-container-low flex flex-col h-full overflow-hidden">
+            <div class="p-4 border-b border-white/5 flex items-center gap-3 shrink-0 h-[72px]">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">API Bindings</span>
+                    <span class="text-sm font-bold text-white uppercase tracking-wider">密钥管理</span>
+                </div>
+            </div>
+            <div class="p-4 shrink-0 border-b border-white/5">
+                <button id="new-config-btn" class="w-full inline-flex justify-center items-center gap-2 rounded-xl bg-primary/10 border border-primary/20 px-4 py-3 text-sm font-bold text-primary transition-all hover:bg-primary hover:text-[#00363b] hover:shadow-[0_0_12px_rgba(0,240,255,0.3)]">
+                    <span class="material-symbols-outlined text-[18px]">add_circle</span>
+                    新建 API 配置
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+                <div id="config-list" class="flex flex-col gap-3">
+                    <!-- Config items injected by JS -->
+                </div>
+            </div>
+            <div class="p-4 bg-surface-container-low border-t border-white/5 shrink-0">
+                <div id="status-banner" class="rounded-xl border border-white/5 bg-black/20 px-4 py-3 text-[10px] leading-relaxed text-on-surface-variant uppercase tracking-wider">
+                    Loading account...
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content (Mirrored from scheduled_tasks) -->
+        <section class="flex-1 overflow-hidden flex flex-col relative bg-surface h-full">
+            <!-- Main Content Header -->
+            <div class="shrink-0 pt-8 px-10 pb-0 border-b border-white/5 bg-surface/80 backdrop-blur-md sticky top-0 z-30">
+                <div class="flex flex-col gap-4 max-w-5xl mx-auto">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-primary">Setup & Activation</div>
+                            <h2 id="main-panel-title" class="mt-1 text-2xl font-headline font-bold text-white">配置详情</h2>
+                        </div>
+                        <div class="flex items-center gap-3">
+                             <div id="config-current-status" class="inline-flex items-center rounded-full border border-white/5 bg-black/20 px-3 py-1 text-[11px] font-bold text-on-surface-variant tracking-wider">
+                                未保存
+                            </div>
+                            <button id="delete-btn-top" type="button" class="hidden inline-flex items-center gap-1 rounded-lg border border-error/20 bg-error/10 px-2 py-1 text-[10px] font-bold text-error transition-colors hover:bg-error/20">
+                                <span class="material-symbols-outlined text-[14px]">delete</span>删除
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- View Switcher Tabs (Simplified) -->
+                    <div class="flex gap-6 mt-4">
+                        <button class="pb-3 text-sm font-bold text-primary border-b-2 border-primary tracking-wide transition-colors">基础配置</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-10 relative">
+                <div class="max-w-5xl mx-auto h-full w-full">
+                    <form id="setup-form" class="space-y-8 pb-10">
+                        <!-- Card: API Provider Info -->
+                        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 p-8 rounded-[24px] border border-white/5 bg-surface-container-low shadow-sm w-full">
+                            <div class="md:col-span-2">
+                                <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">配置展示名称</label>
+                                <input id="config-name" type="text" required class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3.5 text-sm text-white outline-none transition-colors focus:border-primary/50" placeholder="例如：Anthropic-Official / DeepSeek-Work">
+                            </div>
+                            
+                            <div class="md:col-span-1">
+                                <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">服务商 (Provider)</label>
+                                <select id="provider" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3.5 text-sm text-white outline-none transition-colors focus:border-primary/50">
+                                    <option value="anthropic">Anthropic-compatible</option>
+                                    <option value="openai">OpenAI-compatible</option>
+                                </select>
+                            </div>
+                            
+                            <div class="md:col-span-1">
+                                <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">默认模型 (Model ID)</label>
+                                <input id="model" type="text" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3.5 text-sm text-white outline-none transition-colors focus:border-primary/50" value="claude-3-5-sonnet">
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">接口根地址 (API Base)</label>
+                                <input id="api-base" type="url" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3.5 text-sm text-on-surface-variant/80 outline-none transition-colors focus:border-primary/50" value="https://api.anthropic.com">
+                                <p class="mt-2 text-[11px] text-on-surface-variant/50">请求将发送至此地址下的 /chat/completions 或 /messages 端点。</p>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">API Key</label>
+                                <div class="relative">
+                                    <input id="api-key" type="password" required autocomplete="new-password" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3.5 text-sm text-white outline-none transition-colors focus:border-primary/50" placeholder="sk-...">
+                                    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px] opacity-30">vpn_key</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card: Advanced Options -->
+                        <div class="p-8 rounded-[24px] border border-white/5 bg-surface-container-low shadow-sm w-full">
+                            <label class="flex items-start gap-4 cursor-pointer group">
+                                <div class="relative flex items-center h-5">
+                                    <input id="reasoning-enabled" type="checkbox" class="h-5 w-5 rounded-lg border-outline-variant/20 bg-surface-container-highest text-primary focus:ring-primary/20 transition-all cursor-pointer">
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-white group-hover:text-primary transition-colors">开启思索 (Reasoning) 模式</span>
+                                    <span class="text-xs text-on-surface-variant mt-1 leading-relaxed max-w-xl">
+                                        启用此选项后，对于兼容的 OpenAI 系列模型（如 o1/o3），系统将尝试通过特定的参数调用其深度思考能力。
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Sticky Footer Actions (Mirrored from scheduled_tasks) -->
+                        <div class="sticky bottom-0 bg-surface/90 backdrop-blur-md pt-6 pb-2 z-10 border-t border-white/5 mt-8 w-full">
+                            <div class="flex items-center gap-4">
+                                <button id="submit-btn" type="submit" class="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-sm font-bold text-[#00363b] shadow-[0_0_16px_rgba(0,240,255,0.22)] transition-all hover:bg-[#6af7ff] hover:scale-[1.02] active:scale-100">
+                                    <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+                                    <span id="submit-label">保存并立即激活</span>
+                                </button>
+                                <div id="form-feedback" class="text-xs text-on-surface-variant font-medium hidden"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const redirectTo = new URLSearchParams(window.location.search).get("redirect") || "/static/workspace.html";
+        const statusBanner = document.getElementById("status-banner");
+        const runtimeBadge = document.getElementById("runtime-badge");
+        const configList = document.getElementById("config-list");
+        const submitBtn = document.getElementById("submit-btn");
+        const submitLabel = document.getElementById("submit-label");
+        const configNameInput = document.getElementById("config-name");
+        const apiKeyInput = document.getElementById("api-key");
+        const providerInput = document.getElementById("provider");
+        const apiBaseInput = document.getElementById("api-base");
+        const modelInput = document.getElementById("model");
+        const reasoningEnabledInput = document.getElementById("reasoning-enabled");
+        const form = document.getElementById("setup-form");
+
+        function setBanner(message, kind = "neutral") {
+            statusBanner.textContent = message;
+            statusBanner.className = "mb-5 rounded-2xl border px-4 py-3 text-sm leading-6";
+            if (kind === "success") {
+                statusBanner.classList.add("border-primary/30", "bg-primary/10", "text-primary");
+                return;
+            }
+            if (kind === "error") {
+                statusBanner.classList.add("border-error/30", "bg-error/10", "text-error");
+                return;
+            }
+            statusBanner.classList.add("border-white/8", "bg-surface-container-high", "text-on-surface-variant");
+        }
+
+        function setSubmitting(isSubmitting) {
+            submitBtn.disabled = isSubmitting;
+            submitLabel.textContent = isSubmitting ? "Saving..." : "Save And Activate";
+        }
+
+        function applyStatus(status) {
+            providerInput.value = status.provider || "anthropic";
+            apiBaseInput.value = status.api_base || "https://api.minimax.io";
+            modelInput.value = status.model || "MiniMax-M2";
+            reasoningEnabledInput.checked = Boolean(status.reasoning_enabled);
+            runtimeBadge.textContent = status.runtime_ready ? "Ready" : "Bind Key";
+            runtimeBadge.className = status.runtime_ready
+                ? "rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                : "rounded-full border border-secondary/25 bg-secondary/10 px-3 py-1 text-xs font-medium text-secondary";
+            setBanner(
+                status.message || (status.setup_required
+                    ? "Bind an API Key for this account before entering the workspace."
+                    : "This account already has an active API Key."),
+                status.setup_required ? "neutral" : "success"
+            );
+        }
+
+        function renderConfigs(configs) {
+            if (!Array.isArray(configs) || !configs.length) {
+                configList.innerHTML = `
+                    <div class="rounded-2xl border border-dashed border-white/10 bg-surface-container-high px-4 py-5 text-sm text-on-surface-variant">
+                        No saved API configurations for this account yet.
+                    </div>
+                `;
+                return;
+            }
+
+            configList.innerHTML = configs.map((item) => `
+                <div class="config-item group flex flex-col gap-2 p-3 rounded-xl border border-transparent transition-all cursor-pointer ${item.is_active ? "bg-primary/5 border-primary/20" : "hover:bg-white/5"}" data-id="${item.id}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="material-symbols-outlined text-[18px] ${item.is_active ? "text-primary" : "text-on-surface-variant"}">vpn_key</span>
+                            <span class="text-sm font-bold truncate ${item.is_active ? "text-white" : "text-on-surface-variant"}">${item.name}</span>
+                        </div>
+                        ${item.is_active ? '<span class="shrink-0 w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(0,240,255,0.5)]"></span>' : ""}
+                    </div>
+                    <div class="flex items-center gap-2 pl-6">
+                        <span class="text-[9px] font-mono uppercase tracking-wider text-on-surface-variant opacity-60 truncate">${item.provider} · ${item.model}</span>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        async function requireLogin() {
+            const resp = await fetch("/api/auth/me");
+            if (resp.status === 401) {
+                const currentPath = encodeURIComponent(window.location.href);
+                window.location.href = `/static/login.html?redirect=${currentPath}`;
+                throw new Error("Authentication required.");
+            }
+            const user = await resp.json();
+            const avatar = document.getElementById("account-avatar");
+            const displayName = user.display_name || user.username || "?";
+            avatar.textContent = displayName.charAt(0).toUpperCase();
+            avatar.title = `Logged in as ${user.username}`;
+        }
+
+        const mainPanelTitle = document.getElementById("main-panel-title");
+        const deleteBtnTop = document.getElementById("delete-btn-top");
+        const newConfigBtn = document.getElementById("new-config-btn");
+        const configStatusLabel = document.getElementById("config-current-status");
+        let activeConfigsData = [];
+        let currentEditingId = null;
+
+        function setBanner(message, kind = "neutral") {
+            const feedback = document.getElementById("form-feedback");
+            feedback.textContent = message;
+            feedback.className = "text-xs font-medium px-4 py-2 rounded-lg border";
+            feedback.style.display = "block";
+            
+            if (kind === "success") {
+                feedback.classList.add("border-primary/20", "bg-primary/10", "text-primary");
+            } else if (kind === "error") {
+                feedback.classList.add("border-error/20", "bg-error/10", "text-error");
+            } else {
+                feedback.classList.add("border-white/5", "bg-white/5", "text-on-surface-variant");
+            }
+        }
+
+        function setSubmitting(isSubmitting) {
+            submitBtn.disabled = isSubmitting;
+            submitLabel.textContent = isSubmitting ? "正在保存..." : "保存并立即激活";
+        }
+
+        function resetForm() {
+            currentEditingId = null;
+            form.reset();
+            mainPanelTitle.textContent = "新建配置";
+            configStatusLabel.textContent = "未保存";
+            configStatusLabel.className = "inline-flex items-center rounded-full border border-white/5 bg-black/20 px-3 py-1 text-[11px] font-bold text-on-surface-variant tracking-wider";
+            deleteBtnTop.classList.add("hidden");
+            configNameInput.value = "Default";
+            providerInput.value = "anthropic";
+            apiBaseInput.value = "https://api.anthropic.com";
+            modelInput.value = "claude-3-5-sonnet";
+        }
+
+        function loadConfigToForm(configId) {
+            const config = activeConfigsData.find(c => String(c.id) === String(configId));
+            if (!config) return;
+
+            currentEditingId = configId;
+            configNameInput.value = config.name;
+            providerInput.value = config.provider || "anthropic";
+            apiBaseInput.value = config.api_base || "";
+            modelInput.value = config.model || "";
+            reasoningEnabledInput.checked = Boolean(config.reasoning_enabled);
+            apiKeyInput.value = ""; // Always clear API key for security
+            
+            mainPanelTitle.textContent = config.name;
+            configStatusLabel.textContent = config.is_active ? "已激活" : "未激活";
+            configStatusLabel.className = config.is_active 
+                ? "inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-bold text-primary tracking-wider"
+                : "inline-flex items-center rounded-full border border-white/5 bg-white/5 px-3 py-1 text-[11px] font-bold text-on-surface-variant tracking-wider";
+            
+            deleteBtnTop.classList.remove("hidden");
+            // Set specific info per provider if base/model is empty
+            if (!config.api_base && config.provider === "anthropic") apiBaseInput.value = "https://api.anthropic.com";
+            if (!config.api_base && config.provider === "openai") apiBaseInput.value = "https://api.openai.com/v1";
+        }
+
+        function applyStatus(status) {
+            runtimeBadge.textContent = status.runtime_ready ? "Ready" : "Bind Key";
+            runtimeBadge.className = status.runtime_ready
+                ? "rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-primary"
+                : "rounded-full border border-secondary/25 bg-secondary/10 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-secondary";
+            
+            statusBanner.textContent = status.setup_required ? "SETUP REQUIRED" : "RUNTIME READY";
+            statusBanner.className = "rounded-xl border px-4 py-3 text-[10px] leading-relaxed uppercase tracking-wider " + 
+                (status.setup_required ? "border-secondary/20 bg-secondary/5 text-secondary" : "border-primary/20 bg-primary/5 text-primary");
+        }
+
+        async function requireLogin() {
+            const resp = await fetch("/api/auth/me");
+            if (resp.status === 401) {
+                const currentPath = encodeURIComponent(window.location.href);
+                window.location.href = `/static/login.html?redirect=${currentPath}`;
+                throw new Error("Authentication required.");
+            }
+            const user = await resp.json();
+            const avatar = document.getElementById("account-avatar");
+            const displayName = user.display_name || user.username || "?";
+            avatar.textContent = displayName.charAt(0).toUpperCase();
+            avatar.title = `Logged in as ${user.username}`;
+        }
+
+        async function loadPageState() {
+            await requireLogin();
+            const [statusResp, configsResp] = await Promise.all([
+                fetch("/api/setup/status"),
+                fetch("/api/setup/configs"),
+            ]);
+            if (!statusResp.ok) throw new Error("Failed to load setup status");
+            if (!configsResp.ok) throw new Error("Failed to load API configuration list");
+            
+            const status = await statusResp.json();
+            activeConfigsData = await configsResp.json();
+            
+            applyStatus(status);
+            renderConfigs(activeConfigsData);
+            
+            // If we are not editing anything, and there's an active config, show it
+            if (!currentEditingId && activeConfigsData.length) {
+                const active = activeConfigsData.find(c => c.is_active);
+                if (active) loadConfigToForm(active.id);
+                else resetForm();
+            } else if (currentEditingId) {
+                loadConfigToForm(currentEditingId);
+            } else {
+                resetForm();
+            }
+        }
+
+        async function activateConfig(configId) {
+            const response = await fetch(`/api/setup/configs/${configId}/activate`, {
+                method: "POST",
+            });
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(payload.detail || "Failed to switch API configuration");
+            return payload;
+        }
+
+        async function deleteConfig(configId) {
+            const response = await fetch(`/api/setup/configs/${configId}`, {
+                method: "DELETE",
+            });
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(payload.detail || "Failed to delete API configuration");
+        }
+
+        configList.addEventListener("click", (event) => {
+            const item = event.target.closest(".config-item");
+            if (!item) return;
+            loadConfigToForm(item.dataset.id);
+        });
+
+        newConfigBtn.addEventListener("click", resetForm);
+
+        deleteBtnTop.addEventListener("click", async () => {
+            if (!currentEditingId) return;
+            if (!confirm("确定要删除这套 API 配置吗？此操作不可恢复。")) return;
+            try {
+                await deleteConfig(currentEditingId);
+                setBanner("已删除配置", "success");
+                resetForm();
+                await loadPageState();
+            } catch (error) {
+                setBanner(error.message, "error");
+            }
+        });
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            setSubmitting(true);
+            try {
+                const response = await fetch("/api/setup/config", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: configNameInput.value.trim(),
+                        api_key: apiKeyInput.value.trim(),
+                        api_base: apiBaseInput.value.trim(),
+                        model: modelInput.value.trim(),
+                        provider: providerInput.value,
+                        reasoning_enabled: reasoningEnabledInput.checked,
+                        activate: true,
+                    }),
+                });
+                const payload = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(payload.detail || "Failed to save API configuration");
+
+                apiKeyInput.value = "";
+                setBanner("配置已保存并激活", "success");
+                await loadPageState();
+            } catch (error) {
+                setBanner(error.message, "error");
+            } finally {
+                setSubmitting(false);
+            }
+        });
+
+        loadPageState().catch((error) => {
+            if (error.message === "Authentication required.") return;
+            setBanner(error.message, "error");
+        });
+    </script>
+</body>
+
+</html>
+

@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>登录 · Clavi Agent</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* 背景网格动画 */
+        .data-grid-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(143, 245, 255, 0.06) 1px, transparent 0);
+            background-size: 36px 36px;
+        }
+
+        /* 登录卡片玻璃效果 */
+        .login-card {
+            background: rgba(23, 26, 29, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(143, 245, 255, 0.12);
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(143, 245, 255, 0.05);
+        }
+
+        /* 输入框聚焦效果 */
+        .login-input:focus {
+            outline: none;
+            border-color: rgba(143, 245, 255, 0.5);
+            box-shadow: 0 0 0 2px rgba(143, 245, 255, 0.1);
+        }
+
+        /* 登录按钮光晕 */
+        .login-btn:hover {
+            box-shadow: 0 0 24px rgba(143, 245, 255, 0.3);
+        }
+
+        /* 错误提示动画 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* 加载旋转 */
+        @keyframes spin-slow {
+            to { transform: rotate(360deg); }
+        }
+
+        .spin-slow {
+            animation: spin-slow 1s linear infinite;
+        }
+
+        /* 渐入动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed": "#f0c1ff",
+                        "surface-container-low": "#111417",
+                        "primary-fixed": "#00eefc",
+                        "surface-container-lowest": "#000000",
+                        "tertiary-fixed-dim": "#dadfef",
+                        "tertiary-dim": "#dadfef",
+                        "primary-dim": "#00deec",
+                        "on-secondary-fixed-variant": "#8300b4",
+                        "tertiary-container": "#e5ebfb",
+                        "surface": "#0c0e11",
+                        "on-primary-container": "#005359",
+                        "on-tertiary-container": "#515764",
+                        "outline": "#747579",
+                        "error-container": "#9f0519",
+                        "on-primary": "#005d63",
+                        "surface-container-high": "#1d2024",
+                        "on-primary-fixed-variant": "#005e64",
+                        "on-secondary": "#390050",
+                        "background": "#0c0e11",
+                        "primary-container": "#00eefc",
+                        "primary": "#8ff5ff",
+                        "surface-dim": "#0c0e11",
+                        "tertiary": "#f9f9ff",
+                        "error": "#ff716c",
+                        "on-background": "#f9f9fd",
+                        "secondary-container": "#9800d0",
+                        "surface-container-highest": "#23262a",
+                        "secondary-fixed-dim": "#eaaeff",
+                        "on-tertiary-fixed-variant": "#5d6370",
+                        "on-error": "#490006",
+                        "surface-bright": "#292c31",
+                        "secondary": "#d575ff",
+                        "primary-fixed-dim": "#00deec",
+                        "inverse-surface": "#f9f9fd",
+                        "on-surface": "#f9f9fd",
+                        "surface-container": "#171a1d",
+                        "surface-tint": "#8ff5ff",
+                        "error-dim": "#d7383b",
+                        "inverse-on-surface": "#535559",
+                        "tertiary-fixed": "#e8eefe",
+                        "secondary-dim": "#b90afc",
+                        "outline-variant": "#46484b",
+                        "on-secondary-container": "#fff5fc",
+                        "on-surface-variant": "#aaabaf",
+                        "inverse-primary": "#006a71",
+                        "on-primary-fixed": "#003f43",
+                        "surface-variant": "#23262a",
+                        "on-error-container": "#ffa8a3",
+                        "on-tertiary": "#595f6c",
+                        "on-tertiary-fixed": "#404653",
+                        "on-secondary-fixed": "#58007a"
+                    },
+                    fontFamily: { "headline": ["Space Grotesk"], "body": ["Inter"], "label": ["Inter"] },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-surface text-on-surface font-body overflow-hidden h-screen flex items-center justify-center data-grid-bg relative">
+
+    <!-- 背景光晕 -->
+    <div class="absolute inset-0 z-0 pointer-events-none">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-1/4 right-1/3 w-[500px] h-[500px] bg-secondary/4 blur-[150px] rounded-full"></div>
+    </div>
+
+    <!-- 登录卡片 -->
+    <div class="relative z-10 w-full max-w-md px-4 fade-in-up">
+        <div class="login-card rounded-3xl p-8">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+                    <span class="text-2xl font-bold tracking-tighter text-[#00F0FF] uppercase font-['Space_Grotesk']">Clavi Agent</span>
+                </div>
+                <p class="text-[10px] font-semibold uppercase tracking-[0.26em] text-primary mb-3">The key to next-gen intelligent action</p>
+                <p class="text-on-surface-variant text-sm">请登录以继续使用工作台</p>
+            </div>
+
+            <!-- 表单 -->
+            <form id="login-form" class="space-y-5" autocomplete="off">
+                <!-- 用户名 -->
+                <div>
+                    <label class="block text-xs font-mono uppercase tracking-widest text-on-surface-variant mb-2" for="username">
+                        用户名
+                    </label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">person</span>
+                        <input
+                            id="username"
+                            type="text"
+                            autocomplete="username"
+                            placeholder="输入用户名"
+                            class="login-input w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl pl-10 pr-4 py-3 text-sm text-on-surface placeholder-on-surface-variant/50 transition-all"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <!-- 密码 -->
+                <div>
+                    <label class="block text-xs font-mono uppercase tracking-widest text-on-surface-variant mb-2" for="password">
+                        密码
+                    </label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">lock</span>
+                        <input
+                            id="password"
+                            type="password"
+                            autocomplete="current-password"
+                            placeholder="输入密码"
+                            class="login-input w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl pl-10 pr-12 py-3 text-sm text-on-surface placeholder-on-surface-variant/50 transition-all"
+                            required
+                        />
+                        <button
+                            type="button"
+                            id="toggle-password"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors"
+                            title="显示/隐藏密码"
+                        >
+                            <span class="material-symbols-outlined text-sm" id="toggle-password-icon">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 错误提示 -->
+                <div id="error-msg" class="hidden rounded-xl border border-error/30 bg-error/10 px-4 py-3 text-sm text-error"></div>
+
+                <!-- 登录按钮 -->
+                <button
+                    id="login-btn"
+                    type="submit"
+                    class="login-btn w-full bg-primary hover:bg-primary-container text-on-primary font-bold text-sm rounded-xl py-3 px-6 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                    <span id="login-btn-label">登 录</span>
+                    <span id="login-btn-icon" class="material-symbols-outlined text-sm">arrow_forward</span>
+                    <span id="login-spinner" class="material-symbols-outlined text-sm spin-slow hidden">progress_activity</span>
+                </button>
+            </form>
+
+            <!-- 底部说明 -->
+            <div class="mt-6 pt-5 border-t border-white/5 text-center">
+                <p class="text-xs text-on-surface-variant">
+                    首次启动时，服务器日志中会输出一次性 root 密码。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 读取重定向目标（登录后跳回）
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectTo = urlParams.get('redirect') || '/static/workspace.html';
+
+        const passwordInput = document.getElementById('password');
+        const toggleBtn = document.getElementById('toggle-password');
+        const toggleIcon = document.getElementById('toggle-password-icon');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = passwordInput.type === 'password';
+            passwordInput.type = isHidden ? 'text' : 'password';
+            toggleIcon.textContent = isHidden ? 'visibility' : 'visibility_off';
+        });
+
+        // 错误提示
+        function showError(msg) {
+            const el = document.getElementById('error-msg');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+            // 抖动动画
+            el.classList.remove('shake');
+            void el.offsetWidth; // 强制重绘
+            el.classList.add('shake');
+        }
+
+        function clearError() {
+            const el = document.getElementById('error-msg');
+            el.classList.add('hidden');
+            el.textContent = '';
+        }
+
+        // 设置加载状态
+        function setLoading(loading) {
+            const btn = document.getElementById('login-btn');
+            const label = document.getElementById('login-btn-label');
+            const icon = document.getElementById('login-btn-icon');
+            const spinner = document.getElementById('login-spinner');
+            btn.disabled = loading;
+            label.textContent = loading ? '登录中…' : '登 录';
+            icon.classList.toggle('hidden', loading);
+            spinner.classList.toggle('hidden', !loading);
+        }
+
+        // 提交登录
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearError();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showError('请输入用户名和密码。');
+                return;
+            }
+
+            setLoading(true);
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                if (response.ok) {
+                    // 登录成功，跳转
+                    window.location.href = redirectTo;
+                } else {
+                    const data = await response.json().catch(() => ({}));
+                    const msg = data?.detail || '用户名或密码错误，请重试。';
+                    showError(msg);
+                }
+            } catch (err) {
+                showError('网络请求失败，请检查服务是否正常运行。');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // 如果已经登录，直接跳转
+        (async () => {
+            try {
+                const resp = await fetch('/api/auth/me');
+                if (resp.ok) {
+                    window.location.href = redirectTo;
+                }
+            } catch {
+                // 未登录，留在登录页
+            }
+        })();
+    </script>
+</body>
+
+</html>
+

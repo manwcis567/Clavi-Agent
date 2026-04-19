@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Agent API Routing | Clavi Agent</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        surface: "#0c0e11",
+                        "surface-container-lowest": "#000000",
+                        "surface-container-low": "#111417",
+                        "surface-container": "#171a1d",
+                        "surface-container-high": "#1d2024",
+                        "surface-container-highest": "#23262a",
+                        "on-surface": "#f9f9fd",
+                        "on-surface-variant": "#aaabaf",
+                        outline: "#747579",
+                        "outline-variant": "#46484b",
+                        primary: "#8ff5ff",
+                        secondary: "#d575ff",
+                        error: "#ff716c",
+                    },
+                    fontFamily: {
+                        headline: ["Space Grotesk"],
+                        body: ["Inter"],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="min-h-screen bg-surface text-on-surface font-body">
+    <header class="fixed left-0 right-0 top-0 z-50 flex h-16 w-full items-center justify-between border-b border-white/5 bg-[#0c0e11] px-6">
+        <div class="flex items-center gap-4">
+            <div>
+                <h1 class="font-['Space_Grotesk'] text-xl font-bold uppercase tracking-tighter text-[#00F0FF]">
+                    <a href="/" class="transition-colors hover:text-cyan-300">Clavi Agent</a>
+                </h1>
+                <div class="text-[9px] font-semibold uppercase tracking-[0.28em] text-primary">Agent Routing Control</div>
+            </div>
+            <a id="back-to-workspace-link" href="/static/workspace.html" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-bold text-on-surface-variant hover:border-primary/20 hover:text-primary">
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                返回工作区
+            </a>
+            <a href="/static/setup.html" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-bold text-on-surface-variant hover:border-primary/20 hover:text-primary">
+                <span class="material-symbols-outlined text-sm">tune</span>
+                API Config
+            </a>
+        </div>
+        <div id="routing-runtime-badge" class="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-primary">
+            Loading
+        </div>
+    </header>
+
+    <main class="min-h-screen px-6 pb-10 pt-24">
+        <div class="mx-auto max-w-5xl space-y-6">
+            <section class="rounded-[28px] border border-white/5 bg-surface-container-low px-8 py-8 shadow-sm">
+                <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                    <div>
+                        <div class="text-[10px] font-bold uppercase tracking-[0.22em] text-primary">Account-Level Routing</div>
+                        <h2 class="mt-2 text-2xl font-headline font-bold text-white">主 / 子 agent API 组</h2>
+                        <p class="mt-3 max-w-3xl text-sm leading-relaxed text-on-surface-variant">
+                            这里单独管理主 agent 和子 agent 默认使用哪套 API 配置。普通 API 配置仍然在 API Config 页面维护；本页只负责路由关系。
+                        </p>
+                    </div>
+                    <div id="routing-active-config-badge" class="rounded-2xl border border-white/10 bg-surface-container-high px-4 py-3 text-xs leading-relaxed text-on-surface-variant">
+                        尚未选择策略目标
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-6 rounded-[28px] border border-white/5 bg-surface-container-low px-8 py-8 shadow-sm">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div>
+                        <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">策略所属 API 配置</label>
+                        <select id="routing-target-config-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"></select>
+                        <p class="mt-2 text-[11px] text-on-surface-variant/60">为哪一套 API 配置定义主 / 子 agent 的默认路由。</p>
+                    </div>
+                    <div>
+                        <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">主 agent API 组</label>
+                        <select id="routing-planner-api-config-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"></select>
+                        <p class="mt-2 text-[11px] text-on-surface-variant/60">留空时，主 agent 使用当前“策略所属 API 配置”本身。</p>
+                    </div>
+                    <div>
+                        <label class="mb-3 block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">子 agent API 组</label>
+                        <select id="routing-worker-api-config-id" class="w-full rounded-xl border border-outline-variant/20 bg-surface-container-highest px-4 py-3 text-sm text-white outline-none transition-colors focus:border-primary/50"></select>
+                        <p class="mt-2 text-[11px] text-on-surface-variant/60">留空时，子 agent 跟随主 agent；也可以显式指定回当前配置或另一套执行配置。</p>
+                    </div>
+                </div>
+
+                <div id="routing-summary" class="rounded-2xl border border-primary/15 bg-primary/5 px-4 py-4 text-sm leading-relaxed text-on-surface-variant">
+                    主 agent 使用当前配置；子 agent 跟随主 agent。
+                </div>
+
+                <div id="routing-feedback" class="hidden rounded-xl border px-4 py-3 text-sm"></div>
+
+                <div class="flex items-center gap-4">
+                    <button id="routing-save-btn" type="button" class="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-[#00363b] transition-all hover:bg-[#6af7ff]">
+                        <span class="material-symbols-outlined text-[18px]">device_hub</span>
+                        保存路由
+                    </button>
+                    <span class="text-xs text-on-surface-variant">保存后，对应 API 配置在被激活时会按这里的规则解析主 / 子 agent 使用的 API 组。</span>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const redirectTo = new URLSearchParams(window.location.search).get("redirect") || "/static/workspace.html";
+        const runtimeBadge = document.getElementById("routing-runtime-badge");
+        const activeConfigBadge = document.getElementById("routing-active-config-badge");
+        const targetConfigSelect = document.getElementById("routing-target-config-id");
+        const plannerSelect = document.getElementById("routing-planner-api-config-id");
+        const workerSelect = document.getElementById("routing-worker-api-config-id");
+        const summaryEl = document.getElementById("routing-summary");
+        const feedbackEl = document.getElementById("routing-feedback");
+        const saveBtn = document.getElementById("routing-save-btn");
+        const backToWorkspaceLink = document.getElementById("back-to-workspace-link");
+
+        let configs = [];
+        let currentTargetId = "";
+
+        backToWorkspaceLink.href = redirectTo;
+
+        function setFeedback(message, kind = "neutral") {
+            feedbackEl.className = "rounded-xl border px-4 py-3 text-sm";
+            if (!message) {
+                feedbackEl.classList.add("hidden");
+                feedbackEl.textContent = "";
+                return;
+            }
+            feedbackEl.classList.remove("hidden");
+            feedbackEl.textContent = message;
+            if (kind === "success") {
+                feedbackEl.classList.add("border-primary/20", "bg-primary/10", "text-primary");
+                return;
+            }
+            if (kind === "error") {
+                feedbackEl.classList.add("border-error/20", "bg-error/10", "text-error");
+                return;
+            }
+            feedbackEl.classList.add("border-white/10", "bg-surface-container-high", "text-on-surface-variant");
+        }
+
+        function getConfigById(configId) {
+            return configs.find((item) => String(item.id) === String(configId)) || null;
+        }
+
+        function getConfigName(configId, fallback = "当前配置") {
+            const record = getConfigById(configId);
+            return record?.name || fallback;
+        }
+
+        function setSelectOptions(select, options) {
+            select.innerHTML = "";
+            options.forEach((item) => {
+                const option = document.createElement("option");
+                option.value = item.value;
+                option.textContent = item.label;
+                select.appendChild(option);
+            });
+        }
+
+        function populateTargetOptions() {
+            setSelectOptions(
+                targetConfigSelect,
+                configs.map((config) => ({
+                    value: String(config.id),
+                    label: `${config.name}${config.is_active ? " · ACTIVE" : ""}`,
+                })),
+            );
+        }
+
+        function populateRouteOptions() {
+            const targetConfig = getConfigById(currentTargetId);
+            const targetLabel = targetConfig?.name || "当前配置";
+            setSelectOptions(plannerSelect, [
+                { value: "", label: `使用当前配置（${targetLabel}）` },
+                ...configs
+                    .filter((config) => String(config.id) !== String(currentTargetId))
+                    .map((config) => ({ value: String(config.id), label: config.name })),
+            ]);
+            setSelectOptions(workerSelect, [
+                { value: "", label: "跟随主 agent API 组" },
+                ...configs.map((config) => ({ value: String(config.id), label: config.name })),
+            ]);
+        }
+
+        function renderSummary() {
+            const targetConfig = getConfigById(currentTargetId);
+            const targetLabel = targetConfig?.name || "当前配置";
+            const plannerLabel = plannerSelect.value
+                ? getConfigName(plannerSelect.value, targetLabel)
+                : targetLabel;
+            const workerLabel = workerSelect.value
+                ? getConfigName(workerSelect.value, targetLabel)
+                : `跟随主 agent（${plannerLabel}）`;
+
+            summaryEl.textContent = `策略所属配置：${targetLabel}；主 agent 使用 ${plannerLabel}；子 agent 使用 ${workerLabel}。`;
+            activeConfigBadge.textContent = targetConfig?.is_active
+                ? `当前正在编辑 ACTIVE 配置：${targetLabel}`
+                : `当前正在编辑配置：${targetLabel}`;
+        }
+
+        function applyRoutingFromTarget() {
+            const targetConfig = getConfigById(currentTargetId);
+            const routing = targetConfig?.llm_routing_policy || {};
+            populateRouteOptions();
+            plannerSelect.value = routing.planner_api_config_id || "";
+            workerSelect.value = routing.worker_api_config_id || "";
+            renderSummary();
+        }
+
+        function setLoadingState(isLoading) {
+            saveBtn.disabled = isLoading;
+            saveBtn.classList.toggle("opacity-60", isLoading);
+            saveBtn.classList.toggle("cursor-not-allowed", isLoading);
+            runtimeBadge.textContent = isLoading ? "Loading" : "Ready";
+        }
+
+        async function requireLogin() {
+            const resp = await fetch("/api/auth/me");
+            if (resp.status === 401) {
+                const currentPath = encodeURIComponent(window.location.href);
+                window.location.href = `/static/login.html?redirect=${currentPath}`;
+                throw new Error("Authentication required.");
+            }
+        }
+
+        async function loadState() {
+            await requireLogin();
+            setLoadingState(true);
+            try {
+                const [statusResp, configsResp] = await Promise.all([
+                    fetch("/api/setup/status"),
+                    fetch("/api/setup/configs"),
+                ]);
+                if (!statusResp.ok) throw new Error("Failed to load setup status");
+                if (!configsResp.ok) throw new Error("Failed to load API configuration list");
+
+                const status = await statusResp.json();
+                configs = await configsResp.json();
+                runtimeBadge.textContent = status.runtime_ready ? "Ready" : "Bind Key";
+                runtimeBadge.className = status.runtime_ready
+                    ? "rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-primary"
+                    : "rounded-full border border-secondary/20 bg-secondary/10 px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-secondary";
+
+                if (!configs.length) {
+                    setSelectOptions(targetConfigSelect, [{ value: "", label: "暂无 API 配置" }]);
+                    setSelectOptions(plannerSelect, [{ value: "", label: "请先前往 API Config 页面创建配置" }]);
+                    setSelectOptions(workerSelect, [{ value: "", label: "请先前往 API Config 页面创建配置" }]);
+                    saveBtn.disabled = true;
+                    summaryEl.textContent = "当前没有可配置的 API 组。";
+                    activeConfigBadge.textContent = "尚未创建 API 配置";
+                    setFeedback("当前账号还没有 API 配置，请先去 API Config 页面创建。");
+                    return;
+                }
+
+                populateTargetOptions();
+                const activeConfig = configs.find((config) => config.is_active) || configs[0];
+                currentTargetId = currentTargetId && getConfigById(currentTargetId) ? currentTargetId : String(activeConfig.id);
+                targetConfigSelect.value = currentTargetId;
+                applyRoutingFromTarget();
+                saveBtn.disabled = false;
+                setFeedback("");
+            } finally {
+                setLoadingState(false);
+            }
+        }
+
+        async function saveRouting() {
+            if (!currentTargetId) {
+                setFeedback("请先选择要编辑的 API 配置。", "error");
+                return;
+            }
+            setLoadingState(true);
+            setFeedback("");
+            try {
+                const response = await fetch(`/api/setup/configs/${encodeURIComponent(currentTargetId)}/routing`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        planner_api_config_id: plannerSelect.value || null,
+                        worker_api_config_id: workerSelect.value || null,
+                    }),
+                });
+                const payload = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    throw new Error(payload.detail || "保存路由失败");
+                }
+                await loadState();
+                currentTargetId = String(payload.id || currentTargetId);
+                targetConfigSelect.value = currentTargetId;
+                applyRoutingFromTarget();
+                setFeedback("主 / 子 agent API 组路由已保存。", "success");
+            } catch (error) {
+                setFeedback(error.message || "保存路由失败", "error");
+            } finally {
+                setLoadingState(false);
+            }
+        }
+
+        targetConfigSelect.addEventListener("change", () => {
+            currentTargetId = targetConfigSelect.value;
+            applyRoutingFromTarget();
+        });
+        plannerSelect.addEventListener("change", renderSummary);
+        workerSelect.addEventListener("change", renderSummary);
+        saveBtn.addEventListener("click", saveRouting);
+
+        loadState().catch((error) => {
+            if (error.message === "Authentication required.") return;
+            setFeedback(error.message || "加载失败", "error");
+        });
+    </script>
+</body>
+</html>
