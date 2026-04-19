@@ -64,6 +64,9 @@ claude.md
 *.md
 !/README.md
 !/README_CN.md
+!/clavi_agent/config/system_prompt.md
+!/clavi_agent/config/supervisor_policy.md
+!/clavi_agent/config/worker_policy.md
 
 # Internal/extended docs omitted from the public snapshot
 docs/*.md
